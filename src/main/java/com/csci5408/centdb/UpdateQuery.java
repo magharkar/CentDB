@@ -12,11 +12,13 @@ public class UpdateQuery {
         String table_name = "";
         String constraint = "";
         String where_condition;
+        String database_name="";
+        String table_name_log="";
         int count = 0;
-        int position=0;
+        int position = 0;
         int position_where = 0;
 
-        if(query.toLowerCase().contains("update ")) {
+        if (query.toLowerCase().contains("update ")) {
             System.out.println("An update query identified!");
 
             try {
@@ -26,7 +28,9 @@ public class UpdateQuery {
                 Matcher matcher = pattern.matcher(query);
                 while (matcher.find()) {
                     table_name = (matcher.group(1).trim());
-                    table_name = folder+table_name.replaceAll("\\.", "\\\\") + ".txt";
+                    database_name = table_name.split("\\.")[0];
+                    table_name_log = table_name.split("\\.")[1];
+                    table_name = folder + table_name.replaceAll("\\.", "\\\\") + ".txt";
                 }
 
                 String regex1 = "set(.*?)where(.*?)";
@@ -40,17 +44,15 @@ public class UpdateQuery {
                 where_condition = string_where[1].trim();
 
                 File f = new File(table_name);
-                if(f.exists()) {
+                if (f.exists()) {
                     BufferedReader br = new BufferedReader(new FileReader(table_name));
-                    if(br.readLine()!=null) {
-                        StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
-                        while (st1.hasMoreTokens()) {
-                            columns.add(st1.nextToken());
-                            count++;
-                        }
+                    StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
+                    while (st1.hasMoreTokens()) {
+                        columns.add(st1.nextToken());
+                        count++;
                     }
 
-                    if(columns.size()>0) {
+                    if (columns.size() > 0) {
                         for (String column : columns) {
                             s = column.split("\\|");
                         }
@@ -91,18 +93,21 @@ public class UpdateQuery {
                             writer.write(datum + "\n");
                         }
                         writer.close();
-                    }else{
-                        System.out.println("No data in Table: "+table_name);
+                    } else {
+                        System.out.println("No data in Table: " + table_name);
                     }
-                }else{
-                    System.out.println(table_name+": Table doesn't exist");
+                } else {
+                    System.out.println(table_name + ": Table doesn't exist");
                 }
 
-            }catch(Exception e){
+                QueryLogs queryLogs = new QueryLogs();
+                queryLogs.createQueryLog(folder,"Update",
+                        database_name,table_name_log,constraint.split("=")[0],constraint,"where "+where_condition);
+
+            } catch (Exception e) {
                 System.out.println(e);
             }
-        }
-        else{
+        } else {
             System.out.println("An update query unidentified!");
         }
         System.out.println("Update Query Completed!");

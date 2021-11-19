@@ -5,14 +5,16 @@ import java.util.regex.*;
 
 public class DeleteQuery {
     public void deleteQuery(String query, String folder) {
-        String table_name="";
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> data = new ArrayList<>();
-        int count = 0;
+        String table_name="";
         String where_condition;
-        int position=0;
         String[] s = null;
         String line;
+        String database_name="";
+        String table_name_log="";
+        int position=0;
+        int count = 0;
 
         if(query.toLowerCase().contains("delete from ")) {
             System.out.println("Delete query identified!");
@@ -23,7 +25,9 @@ public class DeleteQuery {
                 Matcher matcher = pattern.matcher(query);
                 while (matcher.find()) {
                     table_name = (matcher.group(1).trim());
-                    table_name = folder+table_name.replaceAll("\\.", "\\\\") + ".txt";
+                    database_name = table_name.split("\\.")[0];
+                    table_name_log = table_name.split("\\.")[1];
+                    table_name = folder + table_name.replaceAll("\\.", "\\\\") + ".txt";
                 }
 
                 String[] string_where = query.split("where");
@@ -33,17 +37,15 @@ public class DeleteQuery {
                 String where_column = where_condition.split("=")[0].trim();
 
                 File f = new File(table_name);
-                if(f.exists()) {
+                if (f.exists()) {
                     BufferedReader br = new BufferedReader(new FileReader(table_name));
-                    if(br.readLine()!=null) {
-                        StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
-                        while (st1.hasMoreTokens()) {
-                            columns.add(st1.nextToken());
-                            count++;
-                        }
+                    StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
+                    while (st1.hasMoreTokens()) {
+                        columns.add(st1.nextToken());
+                        count++;
                     }
 
-                    if(columns.size()>0) {
+                    if (columns.size() > 0) {
                         for (String column : columns) {
                             s = column.split("\\|");
                         }
@@ -76,13 +78,18 @@ public class DeleteQuery {
                             writer.write(datum + "\n");
                         }
                         writer.close();
-                    }else{
-                        System.out.println("No data in Table: "+table_name);
+                    } else {
+                        System.out.println("No data in Table: " + table_name);
                     }
-                }else{
-                    System.out.println(table_name+": Table doesn't exist");
+                } else {
+                    System.out.println(table_name + ": Table doesn't exist");
                 }
-            }catch (Exception e){
+
+                QueryLogs queryLogs = new QueryLogs();
+                queryLogs.createQueryLog(folder,"Delete Row",
+                        database_name,table_name_log,"NA","NA","where "+where_condition);
+
+            } catch (Exception e) {
                 System.out.println(e);
             }
         }
