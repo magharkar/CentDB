@@ -49,8 +49,7 @@ public class Aes {
 
     public static String decrypt(String strToDecrypt, String secret)
     {
-        try
-        {
+        try {
             setSecretKey(secret);
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);

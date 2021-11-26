@@ -35,8 +35,6 @@ public class UserInterface {
 						System.out.println("User Id already exists.. please register with new user Id or login");
 						continue ACCESS;
 					}
-					// Use string format
-					int lengthValidation = 8;
 
 					System.out.println("Enter password(min length : 8 characters)");
 					String password = sc.nextLine();
@@ -61,7 +59,6 @@ public class UserInterface {
 
 			case 2:
 				BufferedReader br = new BufferedReader(new FileReader("UserPersistence/User_Profile.txt"));
-				// isUserPresent - Recommendation for better naming for local variables.
 				boolean found = false;
 				String[] userDetails = null;
 				USERID: while (true) {
@@ -70,7 +67,6 @@ public class UserInterface {
 					String line;
 					while ((line = br.readLine()) != null) {
 						String[] str = line.split("\\|");
-						// Check the length of str before accessing first index - Prevent Index out of bounce exception.
 						if ("userId".equals(str[0]))
 							continue;
 						if (str[0].equals(loginId)) {
@@ -86,13 +82,10 @@ public class UserInterface {
 						break USERID;
 					}
 				}
-				// Have initialization of local variables at the top
-				// Use isPasswordValid instead of weird names for local variables.
 				boolean isNotValid = false;
 				do {
 					System.out.println("Password: ");
 					String loginPassword = sc.nextLine();
-					// Might result in an NPE, check ofr the size of the list and a null check before accessing the index 1
 					final String decryptedPassword = Aes.decrypt(userDetails[1], secretKey);
 					if (!loginPassword.equals(decryptedPassword)) {
 						System.out.println("Invalid password.. please enter a valid password");
@@ -102,7 +95,6 @@ public class UserInterface {
 
 				boolean checkNotValid = false;
 				int i = 1;
-				// for (int i = 0; i < securityQuestions.length(); i++) { // usage: securityQuestions.get(i) }
 				for (String securityQuestion : securityQuestions) {
 					checkNotValid = false;
 					do {
