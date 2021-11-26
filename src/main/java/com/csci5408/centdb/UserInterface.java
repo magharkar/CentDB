@@ -1,9 +1,8 @@
 package com.csci5408.centdb;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.csci5408.centdb.encryption.Aes;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +12,8 @@ public class UserInterface {
 	static Scanner sc = new Scanner(System.in);
 
 	public void userAccessControl() throws IOException {
-		String securityAnswer = "";
+		String securityAnswer;
+		String secretKey = System.getenv("SECRET_KEY");
 		FileWriter userProfileWriter = new FileWriter("UserPersistence/User_Profile.txt", true);
 		List<String> securityQuestions = new ArrayList<>();
 
@@ -35,6 +35,9 @@ public class UserInterface {
 						System.out.println("User Id already exists.. please register with new user Id or login");
 						continue ACCESS;
 					}
+					// Use string format
+					int lengthValidation = 8;
+
 					System.out.println("Enter password(min length : 8 characters)");
 					String password = sc.nextLine();
 					while (password.length() < 8) {
@@ -42,7 +45,7 @@ public class UserInterface {
 						password = sc.nextLine();
 					}
 					userProfileWriter.write("\n");
-					userProfileWriter.write(userId + "|" + password);
+					userProfileWriter.write(userId + "|" + Aes.encrypt(password,secretKey));
 					System.out.println("Please answer the following security questions...");
 
 					for (String securityQuestion : securityQuestions) {
@@ -58,6 +61,7 @@ public class UserInterface {
 
 			case 2:
 				BufferedReader br = new BufferedReader(new FileReader("UserPersistence/User_Profile.txt"));
+				// isUserPresent - Recommendation for better naming for local variables.
 				boolean found = false;
 				String[] userDetails = null;
 				USERID: while (true) {
@@ -66,6 +70,7 @@ public class UserInterface {
 					String line;
 					while ((line = br.readLine()) != null) {
 						String[] str = line.split("\\|");
+						// Check the length of str before accessing first index - Prevent Index out of bounce exception.
 						if ("userId".equals(str[0]))
 							continue;
 						if (str[0].equals(loginId)) {
@@ -81,11 +86,15 @@ public class UserInterface {
 						break USERID;
 					}
 				}
+				// Have initialization of local variables at the top
+				// Use isPasswordValid instead of weird names for local variables.
 				boolean isNotValid = false;
 				do {
 					System.out.println("Password: ");
 					String loginPassword = sc.nextLine();
-					if (!userDetails[1].equals(loginPassword)) {
+					// Might result in an NPE, check ofr the size of the list and a null check before accessing the index 1
+					final String decryptedPassword = Aes.decrypt(userDetails[1], secretKey);
+					if (!loginPassword.equals(decryptedPassword)) {
 						System.out.println("Invalid password.. please enter a valid password");
 						isNotValid = true;
 					}
@@ -93,6 +102,7 @@ public class UserInterface {
 
 				boolean checkNotValid = false;
 				int i = 1;
+				// for (int i = 0; i < securityQuestions.length(); i++) { // usage: securityQuestions.get(i) }
 				for (String securityQuestion : securityQuestions) {
 					checkNotValid = false;
 					do {
@@ -119,7 +129,6 @@ public class UserInterface {
 			}
 		} while (true);
 	}
-
 	private static boolean checkIfUserExists(String userId) throws IOException {
 
 		try (BufferedReader br = new BufferedReader(new FileReader("UserPersistence/User_Profile.txt"))) {
