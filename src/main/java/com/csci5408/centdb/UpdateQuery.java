@@ -5,14 +5,14 @@ import java.util.*;
 import java.util.regex.*;
 
 public class UpdateQuery {
-	public ArrayList<String> updateQuery(String query, String folder, boolean persistentFileUpdate) {
+	public ArrayList<String> updateQuery(String query, String folder, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String line;
 		String[] columnSplit = null;
 		String tableName = "";
 		String constraint = "";
-		String whereCondition;
+		String whereCondition = "";
 		String databaseName = "";
 		String tableNameLog = "";
 		int count = 0;
@@ -99,15 +99,19 @@ public class UpdateQuery {
 					} else {
 						System.out.println("No data in Table: " + tableName);
 					}
+					br.close();
 				} else {
 					System.out.println(tableName + ": Table doesn't exist");
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Update", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog(folder, "Update","Sucess", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
+				QueryLogs queryLogs = new QueryLogs();
+				queryLogs.createQueryLog(folder, "Update","Failure", databaseName, tableNameLog, constraint.split("=")[0],
+						constraint, "where " + whereCondition);
 				System.out.println(e);
 			}
 		} else {

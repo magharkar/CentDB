@@ -5,11 +5,11 @@ import java.util.*;
 import java.util.regex.*;
 
 public class DeleteQuery {
-	public void deleteQuery(String query, String folder, boolean persistentFileUpdate) {
+	public void deleteQuery(String query, String folder, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String tableName = "";
-		String whereCondition;
+		String whereCondition = "";
 		String[] columnSplit = null;
 		String line;
 		String databaseName = "";
@@ -84,15 +84,19 @@ public class DeleteQuery {
 					} else {
 						System.out.println("No data in Table: " + tableName);
 					}
+					br.close();
 				} else {
 					System.out.println(tableName + ": Table doesn't exist");
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Delete Row", databaseName, tableNameLog, "NA", "NA",
+				queryLogs.createQueryLog(folder, "Delete Row","Success", databaseName, tableNameLog, "NA", "NA",
 						"where " + whereCondition);
 
 			} catch (Exception e) {
+				QueryLogs queryLogs = new QueryLogs();
+				queryLogs.createQueryLog(folder, "Delete Row","Failure", databaseName, tableNameLog, "NA", "NA",
+						"where " + whereCondition);
 				System.out.println(e);
 			}
 		} else {
