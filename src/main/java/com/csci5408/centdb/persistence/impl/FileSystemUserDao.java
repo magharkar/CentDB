@@ -23,9 +23,7 @@ public class FileSystemUserDao implements IUserDao {
     private FileWriter fileWriter;
     private FileReader fileReader;
 
-    public FileSystemUserDao() throws IOException {
-        fileReader = new FileReader("resources/User_Profile.txt");
-        fileWriter = new FileWriter("resources/User_Profile.txt", true);
+    public FileSystemUserDao()  {
     }
     public List<User> getUsers() throws IOException {
         List<User> userList = new ArrayList<>();
