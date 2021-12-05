@@ -2,6 +2,7 @@ package com.csci5408.centdb.services;
 
 
 import com.csci5408.centdb.model.User;
+import com.csci5408.centdb.persistence.IUserDao;
 import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.Scanner;
 import static com.csci5408.centdb.model.util.Constants.*;
 
 public class UserService {
-	FileSystemUserDao userDao;
+	IUserDao userDao;
 	static Scanner sc = new Scanner(System.in);
 
 	public UserService() throws IOException {
@@ -42,7 +43,7 @@ public class UserService {
 
 		System.out.println("Please answer the following security questions:");
 
-		for (String securityQuestion : securityQuestions) {
+		for (String securityQuestion : SECURITY_QUESTIONS) {
 			System.out.println(securityQuestion);
 			String securityAnswer = sc.nextLine();
 			securityAnswers.add(securityAnswer);
@@ -62,7 +63,7 @@ public class UserService {
 		userInput = sc.nextLine();
 		registerUser.setPassword(userInput);
 		System.out.println("");
-		for (String securityQuestion: securityQuestions) {
+		for (String securityQuestion: SECURITY_QUESTIONS) {
 			System.out.println(securityQuestion);
 			userInput = sc.nextLine();
 			securityAnswers.add(userInput);

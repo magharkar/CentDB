@@ -1,5 +1,6 @@
 package com.csci5408.centdb.logging;
 
+import com.csci5408.centdb.model.LogDetails;
 import com.csci5408.centdb.model.Transaction;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import static com.csci5408.centdb.model.util.Constants.CRASH_REPORT_PATH;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class EventLogsTest {
@@ -19,5 +21,21 @@ public class EventLogsTest {
         File file = new File("resources/CentDB/TransactionLogs.txt");
         BufferedReader bufferedReader = new BufferedReader(new FileReader("resources/CentDB/TransactionLogs.txt"));
         assertTrue(file.exists());
+    }
+    @Test
+    public void crashReportTest() throws IOException {
+        LogDetails logDetails = new LogDetails.LogBuilder()
+                .databaseName("CentDb")
+                .tableName("Orders")
+                .errorMessage("Error while doing an update")
+                .operationName("Update")
+                .build();
+        EventLogs.createCrashReport(logDetails);
+        File file = new File(CRASH_REPORT_PATH);
+        assertTrue(file.exists());
+    }
+    @Test
+    public void eventLogTest(){
+
     }
 }
