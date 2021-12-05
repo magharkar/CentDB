@@ -1,9 +1,9 @@
-package com.csci5408.centdb.persistence;
+package com.csci5408.centdb.persistence.impl;
 import com.csci5408.centdb.encryption.Aes;
 import com.csci5408.centdb.model.User;
+import com.csci5408.centdb.persistence.IUserDao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,7 +19,7 @@ import static com.csci5408.centdb.model.util.Constants.DELIMITER;
 
 @Data
 @AllArgsConstructor
-public class FileSystemUserDao implements UserDao {
+public class FileSystemUserDao implements IUserDao {
     private FileWriter fileWriter;
     private FileReader fileReader;
 
@@ -72,9 +72,12 @@ public class FileSystemUserDao implements UserDao {
 
                 if(!userDetails.getSecurityAnswers().get(0).equals(user.getSecurityAnswers().get(0)) ||
                         !userDetails.getSecurityAnswers().get(1).equals(user.getSecurityAnswers().get(1)))  {
-                    Message = String.format("%s \nSecurity answers entered are incorrect. Please try again!");
+                    Message = String.format("\nSecurity answers entered are incorrect. Please try again!");
                 }
             }
+        }
+        else{
+            Message = "User Id not found! Please try again.";
         }
         return Message;
     }
