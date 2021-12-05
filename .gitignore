@@ -36,5 +36,3 @@ tmp/
 local.properties
 .loadpath
 .factorypath
-*.DS_Store
-.idea
