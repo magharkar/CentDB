@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +17,6 @@ public class SelectQuery {
 		String table = "";
 		List<String> columns = new ArrayList<String>();
 		List<String> columnNames = new ArrayList<String>();
-
 		List<HashMap<String, String>> tableData = new ArrayList<HashMap<String, String>>();
 		String condition = "";
 		String[] s = null;
@@ -75,13 +72,13 @@ public class SelectQuery {
 				} else {
 					System.out.println("No data in Table: " + table);
 				}
-
+				br.close();
 			} else {
 				System.out.println(table + ": Table doesn't exist");
 			}
-			for(int i = 0; i < tableData.size(); i++) {
-				for(String key:columnNames) {
-				System.out.print(tableData.get(i).get(key)+ "       ");
+			for (int i = 0; i < tableData.size(); i++) {
+				for (String key : columnNames) {
+					System.out.print(tableData.get(i).get(key) + "       ");
 				}
 				System.out.println();
 			}
