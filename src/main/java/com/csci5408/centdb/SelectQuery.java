@@ -1,10 +1,9 @@
 
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -20,6 +19,8 @@ public class SelectQuery {
 		String table = "";
 		List<String> columns = new ArrayList<String>();
 		List<String> columnNames = new ArrayList<String>();
+
+		List<HashMap<String, String>> tableData = new ArrayList<HashMap<String, String>>();
 		String condition = "";
 		String[] s = null;
 		try {
@@ -44,35 +45,46 @@ public class SelectQuery {
 			condition = string_where[1].trim();
 			System.out.println("333" + " " + condition);
 
-        File f = new File(table+".txt");
-        if(f.exists()) {
-            BufferedReader br = new BufferedReader(new FileReader(table+".txt"));
-            if(br.readLine()!=null) {
-                StringTokenizer st = new StringTokenizer(br.readLine(), "\t");
-                int count = 0;
-                while (st.hasMoreTokens()) {
-                    columns.add(st.nextToken());
-                    count++;
-                }
-            }
+			File f = new File(table + ".txt");
+			if (f.exists()) {
+				BufferedReader br = new BufferedReader(new FileReader(table + ".txt"));
+				String columnName = br.readLine();
+				String row = br.readLine();
 
-            if(columns.size()>0) {
-                for (String column : columns) {
-                	System.out.println("555" + " " + column);
-                    s = column.split("\\|");
-                	System.out.println("6666" + " " + s);
-                	System.out.println(s[0]);
-                	System.out.println(s[1]);
-                	System.out.println(s[2]);
-                	System.out.println(s[3]);
-                }
+				while (row != null) {
+					columns.add(row);
+					row = br.readLine();
+					;
+				}
+				if (columnName != null) {
+					s = columnName.split("\\|");
+					for (String column : s) {
+						columnNames.add(column);
+					}
+				}
+				if (columns.size() > 0) {
+					for (String column : columns) {
+						HashMap<String, String> rowData = new HashMap<String, String>();
+						s = column.split("\\|");
+						for (int i = 0; i < s.length; i++) {
+							rowData.put(columnNames.get(i), s[i]);
+						}
+						tableData.add(rowData);
+					}
 
-            }else{
-                System.out.println("No data in Table: "+table);
-            }
-        }else{
-            System.out.println(table+": Table doesn't exist");
-        }
+				} else {
+					System.out.println("No data in Table: " + table);
+				}
+
+			} else {
+				System.out.println(table + ": Table doesn't exist");
+			}
+			for(int i = 0; i < tableData.size(); i++) {
+				for(String key:columnNames) {
+				System.out.print(tableData.get(i).get(key)+ "       ");
+				}
+				System.out.println();
+			}
 
 		} catch (Exception e) {
 			System.out.println(e);

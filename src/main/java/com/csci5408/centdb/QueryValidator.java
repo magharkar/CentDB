@@ -12,6 +12,7 @@ public class QueryValidator {
 			+ "(use (.*?))|"
 			+ "(create table (.*?) \\((.*?)\\))|"
 			+ "(begin)|"
+			+ "(start)|"
 			+ "(commit)|"
 			+ "(rollback)", Pattern.CASE_INSENSITIVE);
     
