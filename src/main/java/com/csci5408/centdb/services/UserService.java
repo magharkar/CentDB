@@ -108,7 +108,7 @@ public class UserService {
 			int ch = sc.nextInt();
 			switch (ch) {
 			case 1:
-				String query = sc.next();
+				String query = "use test";//sc.next();
 				QueryValidator queryValidator = new QueryValidator();
 				validateQuery = queryValidator.validateQuery(query);
 				if(validateQuery) {

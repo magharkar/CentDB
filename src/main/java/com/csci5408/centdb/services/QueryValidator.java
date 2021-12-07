@@ -8,7 +8,7 @@ public class QueryValidator {
 			+ "(insert into(.*?) \\((.*?)\\) values \\((.*?))\\)|"
 			+ "(update (.*?) set (.*?) where (.*?))|"
 			+"(show dbs)|"
-			+ "(create db (.*?))|"
+			+ "(create database (.*?))|"
 			+ "(use (.*?))|"
 			+ "(create table (.*?) \\((.*?)\\))|"
 			+ "(begin)|"
