@@ -10,5 +10,8 @@ public final class Constants {
     public static final String CRASH_REPORT_PATH = "resources/CrashReports.txt";
     public static final String EVENT_LOG_PATH = "resources/EventLogs.txt";
     public static final String TRANSACTION_LOG_PATH = "resources/%s/TransactionLogs.txt";
-}
+    public static final String TABLE_PATH = "resources/Databases/%s/%s.txt";
+    public static final String METADATA_PATH = "resources/Databases/%s/%s-meta.txt";
+    public static final String EXPORT_PATH = "resources/Databases/dump-%s.sql";
 
+}
