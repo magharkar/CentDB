@@ -3,7 +3,9 @@ package com.csci5408.centdb.services;
 import com.csci5408.centdb.model.Metadata;
 import com.csci5408.centdb.model.Query;
 import com.csci5408.centdb.model.util.Operation;
+import com.csci5408.centdb.persistence.IFileReader;
 import com.csci5408.centdb.persistence.IQueryDao;
+import com.csci5408.centdb.persistence.impl.FileReader;
 import com.csci5408.centdb.persistence.impl.QueryDao;
 
 import java.io.IOException;
@@ -16,10 +18,12 @@ import java.util.regex.Pattern;
 
 public class QueryService {
     private IQueryDao queryDao;
+    private IFileReader fileReader;
     static Scanner sc;
     public QueryService() {
         sc = new Scanner(System.in);
         this.queryDao = new QueryDao();
+        this.fileReader = new FileReader();
     }
 
     public void queryProcessor() throws IOException {
@@ -67,7 +71,7 @@ public class QueryService {
                        .tableName(querySplit[1].trim())
                        .build();
                //check if table exists
-               List<Metadata> metadataList = queryDao.getMetadata();
+               List<Metadata> metadataList = fileReader.getMetadata();
                for (Metadata metadata: metadataList) {
                    if(metadata.getTableName().equals(dropQuery.getTableName())){
                        return queryDao.dropTable(dropQuery);
