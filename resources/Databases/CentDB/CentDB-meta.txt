@@ -1,0 +1,8 @@
+table|orders
+orderid|int|primary_key
+productid|int|foreign_key
+orderDetails|text|
+table|items
+itemid|int|primary_key
+productid|int|foreign_key
+itemDetails|text|

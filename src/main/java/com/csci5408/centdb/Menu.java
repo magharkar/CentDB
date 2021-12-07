@@ -1,5 +1,6 @@
 package com.csci5408.centdb;
 
+import com.csci5408.centdb.services.QueryService;
 import com.csci5408.centdb.services.UserService;
 
 import java.io.IOException;
@@ -45,13 +46,15 @@ public class Menu {
             }
         } while (true);
     }
-    public static void databaseOperations() {
+    public static void databaseOperations() throws IOException {
+        QueryService queryService = new QueryService();
         do {
             System.out.println(
                     "Please select an operation to perform\n1. Write Queries\r\n2. Export\r\n3. Data Model\r\n4. Analytics\r\n5. Logout");
             int ch = sc.nextInt();
             switch (ch) {
                 case 1:
+                    queryService.queryProcessor();
                     // code for writing queries
                     break;
                 case 2:
@@ -65,8 +68,7 @@ public class Menu {
                     break;
                 case 5:
                     System.out.println("Logging out. Thank you!");
-                    System.exit(0);
-                    break;
+                    return;
             }
         } while (true);
     }

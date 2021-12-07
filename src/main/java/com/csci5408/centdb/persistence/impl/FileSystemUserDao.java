@@ -31,7 +31,7 @@ public class FileSystemUserDao implements IUserDao {
         String line;
         while ((line = bufferedReader.readLine()) != null) {
             String[] str = line.split(Pattern.quote(DELIMITER));
-            if(!Objects.isNull(str) && str.length>0){
+            if(!Objects.isNull(str) && str.length>1){
                 userList.add(new User(str[0],str[1], Arrays.asList(str[2],str[3])));
             }
             else
