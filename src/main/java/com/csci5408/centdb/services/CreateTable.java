@@ -1,6 +1,4 @@
-package com.csci5408.centdb;
-
-import com.csci5408.centdb.services.CreateDatabase;
+package com.csci5408.centdb.services;
 import com.csci5408.enums.ColumnConstraints;
 import com.csci5408.enums.ColumnDataTypes;
 
@@ -14,6 +12,11 @@ public class CreateTable {
     static  String CREATE_TABLE_COMMAND = "Create table ";
     static  String SPACE = " ";
     static  String DELIMITER = "|";
+
+    ArrayList<String> columnNames = new ArrayList<>();
+    ArrayList<String[]> columns = new ArrayList<>();
+
+
     public void create(String currentDatabase, String tableName, String[] allInputWords,
                        String inputString) throws IOException {
         // 1. Create table file with name array[2]. throw error if it exists
@@ -26,20 +29,28 @@ public class CreateTable {
         }
         else {
             System.out.println(inputString);
-            FileWriter databaseMetaFileWriter = new FileWriter(databaseMetaPath, true);
-            databaseMetaFileWriter.write("Table" + DELIMITER + tableName + "\n" );
-            databaseMetaFileWriter.flush();
-            validateAndSetColumns(inputString, tableFilePath, databaseMetaPath, tableName);
+            boolean success = validateColumns(inputString, tableName);
+            if(success) {
+                FileWriter databaseMetaFileWriter = new FileWriter(databaseMetaPath, true);
+                FileWriter tableFileWriter = new FileWriter(tableFilePath, true);
+                databaseMetaFileWriter.write("Table" + DELIMITER + tableName + "\n" );
+                databaseMetaFileWriter.flush();
+                for(int i = 0; i< columns.size(); i++) {
+                    String[] column = columns.get(i);
+                    tableFileWriter.write(column[0] + "|");
+                    databaseMetaFileWriter.write(column[0] + "|" + column[1] + "|" + column[2] + "\n");
+                }
+                tableFileWriter.close();
+                databaseMetaFileWriter.close();
+            }
+
+            //   validateAndSetColumns(inputString, tableFilePath, databaseMetaPath, tableName);
 
         }
 
     }
 
-    public void validateAndSetColumns(String inputString, String tableFilePath, String databaseMetaPath, String table)
-            throws IOException {
-        FileWriter tableFileWriter = new FileWriter(tableFilePath, true);
-        FileWriter databaseMetaFileWriter = new FileWriter(databaseMetaPath, true);
-
+    public boolean validateColumns(String inputString, String table) {
 
         int startParanthesisIndex = inputString.indexOf('(');
         int endParanthesisIndex = inputString.lastIndexOf(')');
@@ -52,6 +63,7 @@ public class CreateTable {
             String[] columnWords = test.split(" ");
             if(columnWords.length < 2) {
                 System.out.println("Column syntax is incorrect");
+                return false;
             } else {
                 boolean isColumnNameCorrect = false;
                 boolean isColumnTypeCorrect = false;
@@ -60,7 +72,13 @@ public class CreateTable {
 
                 String columnName = columnWords[0];
                 //write columnwords[0] to table file
-                isColumnNameCorrect = true;
+                if(columnNames.contains(columnName)) {
+                    System.out.println("This column name already exists");
+                    return false;
+                } else {
+                    columnNames.add(columnName);
+                    isColumnNameCorrect = true;
+                }
 
                 String columnDataType = columnWords[1];
                 //validate columnwords[1]
@@ -75,7 +93,8 @@ public class CreateTable {
                         //store type data in database-meta file
                         isColumnTypeCorrect = true;
                     } else {
-                        System.out.println("error");
+                        System.out.println("Data type is wrong");
+                        return false;
                     }
                 } else if(columnDataType.contains("(") && columnDataType.indexOf(")") == columnDataType.length() - 1) {
                     //validate varchar, varbinary, enum, set
@@ -92,10 +111,12 @@ public class CreateTable {
                             isColumnTypeCorrect = true;
                         } else {
                             System.out.println("error");
+                            return false;
                         }
                     }
                 } else {
                     System.out.println("error");
+                    return false;
                 }
 
 
@@ -109,27 +130,29 @@ public class CreateTable {
                     }
                     if (!isConstraintMatched) {
                         isColumnConstraintCorrect = false;
+                        return false;
                     }
                     //validate columnwords[2]
                 }
                 if(isColumnNameCorrect && isColumnTypeCorrect && isColumnConstraintCorrect) {
-                    tableFileWriter.write(columnName + "|");
-                    databaseMetaFileWriter.write(columnName + "|" + columnDataType + "" +
-                            "|" + columnConstraint + "\n");
+                    String[] column = {columnName, columnDataType, columnConstraint};
+                    columns.add(column);
+//                    tableFileWriter.write(columnName + "|");
+//                    databaseMetaFileWriter.write(columnName + "|" + columnDataType + "" +
+//                            "|" + columnConstraint + "\n");
                 }
 
 
             }
         }
-        tableFileWriter.close();
-        databaseMetaFileWriter.close();
+        return individualColumnArray.size() == columns.size();
+
     }
 
-    public void createTable(String input) throws IOException {
+    public void createTable(String input, String currentDatabase) throws IOException {
         String[] inputWords = input.split(" ");
         String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
-      //  CreateDatabase db = new CreateDatabase();
-        String currentDatabase = CreateDatabase.getDatabaseName();
+        //  CreateDatabase db = new CreateDatabase();
 
         if(currentDatabase == null) {
             System.out.println("Please perform use database query first");

@@ -1,11 +1,13 @@
 package com.csci5408.centdb.services;
 
+import com.csci5408.centdb.logging.QueryLogs;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
 public class DeleteQuery {
-	public Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
+	public static Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String tableName = "";

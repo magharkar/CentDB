@@ -1,5 +1,7 @@
 package com.csci5408.centdb.services;
 
+import com.csci5408.centdb.logging.QueryLogs;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;

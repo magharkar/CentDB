@@ -1,6 +1,6 @@
 package com.csci5408.centdb.services;
 
-import static com.csci5408.centdb.model.Constants.TRANSACTION_LOG_PATH;
+import static com.csci5408.centdb.model.util.Constants.TRANSACTION_LOG_PATH;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class Transactions {
 	static Integer transactionNumber = 101;
 	static List<Map<String, String>> bufferPersistence = new ArrayList<>();
 
-	public void processTransaction(String query) {
+	public void processTransaction(String query) throws Exception {
 		Map<String, Map<String, String>> tableData = new HashMap<>();
 		QueryValidator queryValidator = new QueryValidator();
 
@@ -44,7 +44,7 @@ public class Transactions {
 			if (statement.trim().startsWith("insert")) {
 
 				// if (queryValidator.validateQuery(statement)) {
-				Object updatedResult = InsertQuery.insert(statement, "test", false);
+				Object updatedResult = InsertQuery.insert(statement, "test");
 				addToBuffer(updatedResult, "insert");
 				// } else {
 				// throw new Exception("There's an error in the syntax..please check it");

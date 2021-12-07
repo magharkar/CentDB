@@ -2,7 +2,7 @@ package com.csci5408.centdb.services;
 
 
 import com.csci5408.centdb.model.User;
-import com.csci5408.centdb.persistence.FileSystemUserDao;
+import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class UserService {
 
 					System.out.println("Please answer the following security questions:");
 
-					for (String securityQuestion : securityQuestions) {
+					for (String securityQuestion : SECURITY_QUESTIONS) {
 						System.out.println(securityQuestion);
 						String securityAnswer = sc.nextLine();
 						securityAnswers.add(securityAnswer);
@@ -71,7 +71,7 @@ public class UserService {
 				userInput = sc.nextLine();
 				registerUser.setPassword(userInput);
 				System.out.println("");
-				for (String securityQuestion: securityQuestions) {
+				for (String securityQuestion: SECURITY_QUESTIONS) {
 					System.out.println(securityQuestion);
 					userInput = sc.nextLine();
 					securityAnswers.add(userInput);

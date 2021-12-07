@@ -3,7 +3,6 @@ package com.csci5408.centdb.services;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.csci5408.centdb.logging.EventLogs;
+import com.csci5408.centdb.logging.QueryLogs;
 import com.csci5408.centdb.model.LogDetails;
 import com.csci5408.centdb.model.LogDetails.LogBuilder;
 
@@ -93,12 +93,12 @@ public class CommitToPersistence {
 			bw.append(newRow);
 			bw.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Insert Row", "Success", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog("Insert Row", "Success", buffer.get("database"), buffer.get("table"),
 					"NA", "NA", "NA");
 			generateEventLogs(buffer, "insert", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Insert Row", "Failure", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog( "Insert Row", "Failure", buffer.get("database"), buffer.get("table"),
 					"NA", "NA", "NA");
 			throw e;
 		}
@@ -119,12 +119,12 @@ public class CommitToPersistence {
 			}
 			wr.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Delete Row", "Success", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog("Delete Row", "Success", buffer.get("database"), buffer.get("table"),
 					"NA", "NA", "where " + buffer.get("where_condition"));
 			generateEventLogs(buffer, "delete", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Delete Row", "Failure", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog("Delete Row", "Failure", buffer.get("database"), buffer.get("table"),
 					"NA", "NA", "where " + buffer.get("where_condition"));
 			throw e;
 		}
@@ -176,13 +176,13 @@ public class CommitToPersistence {
 			}
 			wr.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Update", "Sucess", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog("Update", "Sucess", buffer.get("database"), buffer.get("table"),
 					buffer.get("set_column_name"), buffer.get("set_column_name") + "=" + buffer.get("after_value"),
 					"where " + buffer.get("condition_column_name") + "=" + buffer.get(("condition_column_value")));
 			generateEventLogs(buffer, "update", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog("databases", "Update", "Failure", buffer.get("database"), buffer.get("table"),
+			queryLogs.createQueryLog("Update", "Failure", buffer.get("database"), buffer.get("table"),
 					buffer.get("set_column_name"), buffer.get("set_column_name") + "=" + buffer.get("after_value"),
 					"where " + buffer.get("condition_column_name") + "=" + buffer.get(("condition_column_value")));
 			throw e;

@@ -1,6 +1,7 @@
-package com.csci5408.centdb.persistence;
+package com.csci5408.centdb.persistence.impl;
 import com.csci5408.centdb.encryption.Aes;
 import com.csci5408.centdb.model.User;
+import com.csci5408.centdb.persistence.UserDao;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
