@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface IFileReader {
     List<Metadata> getMetadata() throws IOException;
+    List<String> getColumnValues(String tablePath) throws IOException;
+    boolean createFile(String path) throws IOException;
 
 }

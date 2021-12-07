@@ -1,8 +1,4 @@
 table|orders
-orderid|int|primary_key
-productid|int|foreign_key
-orderDetails|text|
-table|items
-itemid|int|primary_key
-productid|int|foreign_key
-itemDetails|text|
+orderId|int|primary_key
+orderNumber|int|
+personId|text|foreign_key

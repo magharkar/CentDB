@@ -2,9 +2,13 @@ package com.csci5408.centdb.persistence.impl;
 
 import com.csci5408.centdb.model.Column;
 import com.csci5408.centdb.model.Metadata;
+import com.csci5408.centdb.model.util.Database;
 import com.csci5408.centdb.persistence.IFileReader;
 
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,11 +17,12 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static com.csci5408.centdb.model.util.Constants.DELIMITER;
+import static com.csci5408.centdb.model.util.Constants.METADATA_PATH;
 
 public class FileReader implements IFileReader {
     @Override
     public List<Metadata> getMetadata() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader("resources/Databases/CentDB/CentDB-meta.txt"));
+        BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(String.format(METADATA_PATH, Database.getDatabaseName(), Database.getDatabaseName())));
 
         List<Metadata> metadataList = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
@@ -43,6 +48,31 @@ public class FileReader implements IFileReader {
         }
         add(metadataList, tableName, columns);
         return metadataList;
+    }
+    @Override
+    public List<String> getColumnValues(String tablePath) throws IOException {
+        List<String> tableList = new ArrayList<>();
+        if(checkFileExists(tablePath)){
+            BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(tablePath));
+            String line;
+            while((line=bufferedReader.readLine())!=null){
+                tableList.add(line);
+            }
+        }
+        return tableList;
+    }
+    public boolean checkFileExists(String path){
+        File file = new File(path);
+        return file.exists();
+    }
+    public boolean createFile(String path) throws IOException {
+        File file = new File(path);
+        if(file.createNewFile()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     private void add(List<Metadata> metadataList, String tableName, List<Column> columns) {
         Metadata tableMetadata = new Metadata();
