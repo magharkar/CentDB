@@ -1,0 +1,3 @@
+Transaction Id| Transaction Number|Previous Pointer| Next Pointer| Operation| Table Name| Row Id| Column Name| Before Value| After Value341|101|Null|352|**Start transaction**|||Transaction Id| Transaction Number|Previous Pointer| Next Pointer| Operation| Table Name| Row Id| Column Name| Before Value| After Value
+341|101|Null|352|**Start transaction**|||Transaction Id| Transaction Number|Previous Pointer| Next Pointer| Operation| Table Name| Row Id| Column Name| Before Value| After Value
+352|101|341|363|PRODUCT|1551-QC|tampons|pads
