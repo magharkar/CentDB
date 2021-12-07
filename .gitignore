@@ -36,3 +36,8 @@ tmp/
 local.properties
 .loadpath
 .factorypath
+<<<<<<< HEAD
+=======
+*.DS_Store
+.idea
+>>>>>>> 042572a0107f475e6b2399301133ea84fa5993b9

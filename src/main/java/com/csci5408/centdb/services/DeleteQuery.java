@@ -1,24 +1,23 @@
-package com.csci5408.centdb;
+package com.csci5408.centdb.services;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
 public class DeleteQuery {
-	public void deleteQuery(String query, String folder, boolean persistentFileUpdate) throws IOException {
+	public void deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String tableName = "";
 		String whereCondition = "";
 		String[] columnSplit = null;
 		String line;
-		String databaseName = "";
 		String tableNameLog = "";
 		int position = 0;
 		int count = 0;
 
-		if (query.toLowerCase().contains("delete from ")) {
-			System.out.println("Delete query identified!");
+		if (query.toLowerCase().contains("delete from")) {
+			System.out.println("Delete from table query identified!");
 
 			try {
 				String regex = "delete from(.*?)where(.*?)";
@@ -26,15 +25,13 @@ public class DeleteQuery {
 				Matcher matcher = pattern.matcher(query);
 				while (matcher.find()) {
 					tableName = (matcher.group(1).trim());
-					databaseName = tableName.split("\\.")[0];
-					tableNameLog = tableName.split("\\.")[1];
-					tableName = folder + tableName.replaceAll("\\.", "\\\\") + ".txt";
+					tableNameLog = (matcher.group(1).trim());
+					tableName = databaseName + "\\" + tableName + ".txt";
 				}
 
 				String[] string_where = query.split("where");
 				whereCondition = string_where[1].trim();
 				String where_value = whereCondition.split("=")[1].trim();
-				where_value = where_value.substring(1, where_value.length() - 1);
 				String where_column = whereCondition.split("=")[0].trim();
 
 				File file = new File(tableName);
@@ -90,12 +87,12 @@ public class DeleteQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Delete Row","Success", databaseName, tableNameLog, "NA", "NA",
+				queryLogs.createQueryLog("Delete Row", "Success", databaseName, tableNameLog, "NA", "NA",
 						"where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Delete Row","Failure", databaseName, tableNameLog, "NA", "NA",
+				queryLogs.createQueryLog("Delete Table Row", "Failure", databaseName, tableNameLog, "NA", "NA",
 						"where " + whereCondition);
 				System.out.println(e);
 			}

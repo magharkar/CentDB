@@ -1,11 +1,11 @@
-package com.csci5408.centdb;
+package com.csci5408.centdb.services;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
 public class UpdateQuery {
-	public ArrayList<String> updateQuery(String query, String folder, boolean persistentFileUpdate) throws IOException {
+	public ArrayList<String> updateQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String line;
@@ -13,13 +13,12 @@ public class UpdateQuery {
 		String tableName = "";
 		String constraint = "";
 		String whereCondition = "";
-		String databaseName = "";
 		String tableNameLog = "";
 		int count = 0;
 		int position = 0;
 		int positionWhere = 0;
 
-		if (query.toLowerCase().contains("update ")) {
+		if (query.split(" ")[0].equalsIgnoreCase("update")) {
 			System.out.println("An update query identified!");
 
 			try {
@@ -29,9 +28,8 @@ public class UpdateQuery {
 				Matcher matcher = pattern.matcher(query);
 				while (matcher.find()) {
 					tableName = (matcher.group(1).trim());
-					databaseName = tableName.split("\\.")[0];
-					tableNameLog = tableName.split("\\.")[1];
-					tableName = folder + tableName.replaceAll("\\.", "\\\\") + ".txt";
+					tableNameLog = (matcher.group(1).trim());
+					tableName = databaseName + "\\" + tableName +".txt";
 				}
 
 				String regex1 = "set(.*?)where(.*?)";
@@ -42,11 +40,13 @@ public class UpdateQuery {
 				}
 
 				String[] string_where = query.split("where");
+				for(int i=0;i<string_where.length;i++) {
+				}
 				whereCondition = string_where[1].trim();
 
-				File f = new File(tableName);
-				if (f.exists()) {
-					BufferedReader br = new BufferedReader(new FileReader(tableName));
+				File file = new File(tableName);
+				if (file.exists()) {
+					BufferedReader br = new BufferedReader(new FileReader(file));
 					StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
 					while (st1.hasMoreTokens()) {
 						columns.add(st1.nextToken());
@@ -57,7 +57,7 @@ public class UpdateQuery {
 						for (String column : columns) {
 							columnSplit = column.split("\\|");
 						}
-						for (int i = 0; i < Objects.requireNonNull(columnSplit).length; i++) {
+						for (int i = 0; i < columnSplit.length; i++) {
 							if (columnSplit[i].trim().equals(constraint.split("=")[0].trim())) {
 								position = i;
 							}
@@ -66,6 +66,8 @@ public class UpdateQuery {
 							}
 						}
 
+						System.out.println(position);
+						System.out.println(positionWhere);
 						while ((line = br.readLine()) != null) {
 							StringTokenizer st2 = new StringTokenizer(line, "\t");
 							for (int i = 0; i < count; i++) {
@@ -77,11 +79,10 @@ public class UpdateQuery {
 							}
 						}
 
+						
 						String where_value = whereCondition.split("=")[1].trim();
-						where_value = where_value.substring(1, where_value.length() - 1);
 						String set_value = constraint.split("=")[1].trim();
-						set_value = set_value.substring(1, set_value.length() - 1);
-
+						
 						for (int i = 0; i < data.size(); i++) {
 							if (data.get(i).split("\\|")[positionWhere].trim().equals(where_value)) {
 								data.set(i, data.get(i).replaceAll(data.get(i).split("\\|")[position], set_value));
@@ -105,12 +106,12 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Update","Sucess", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog("Update","Success", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(folder, "Update","Failure", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog("Update","Failure", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 				System.out.println(e);
 			}

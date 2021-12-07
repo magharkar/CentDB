@@ -1,3 +1,0 @@
-Query type|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
-insert|Success|db1|table1
-update|Success|db1|table1
