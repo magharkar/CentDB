@@ -12,17 +12,22 @@ import java.util.Arrays;
 public class CreateTable {
     static  String CREATE_TABLE_COMMAND = "Create table ";
     static  String SPACE = " ";
+    static  String DELIMITER = "|";
     public void create(String currentDatabase, String tableName, String[] allInputWords,
                        String inputString) throws IOException {
         // 1. Create table file with name array[2]. throw error if it exists
         String databaseMetaPath = "Databases" + "//" + currentDatabase + "//" + currentDatabase + "-meta.txt";
         String tableFilePath = "Databases" + "//" + currentDatabase + "//" + tableName + ".txt";
         File tableFile = new File(tableFilePath);
-        boolean isFileCreated = tableFile.createNewFile();
-        if(!isFileCreated) {
+        //boolean isFileCreated = tableFile.createNewFile();
+        if(tableFile.exists()) {
             System.out.println("This table already exists\n");
         }
         else {
+            System.out.println(inputString);
+            FileWriter databaseMetaFileWriter = new FileWriter(databaseMetaPath, true);
+            databaseMetaFileWriter.write("Table" + DELIMITER + tableName + "\n" );
+            databaseMetaFileWriter.flush();
             validateAndSetColumns(inputString, tableFilePath, databaseMetaPath, tableName);
 
         }
@@ -37,12 +42,13 @@ public class CreateTable {
 
         int startParanthesisIndex = inputString.indexOf('(');
         int endParanthesisIndex = inputString.lastIndexOf(')');
-        String columnData = inputString.substring(startParanthesisIndex + 1, endParanthesisIndex);
+        String columnData = inputString.substring(startParanthesisIndex + 1, endParanthesisIndex).trim();
         System.out.println(columnData);
         String[] individualColumns = columnData.split(",");
         ArrayList<String> individualColumnArray = new ArrayList<>(Arrays.asList(individualColumns));
         for(int i = 0; i < individualColumnArray.size(); i++) {
-            String[] columnWords = individualColumnArray.get(i).split(" ");
+            String test = individualColumnArray.get(i).trim();
+            String[] columnWords = test.split(" ");
             if(columnWords.length < 2) {
                 System.out.println("Column syntax is incorrect");
             } else {
@@ -74,8 +80,7 @@ public class CreateTable {
                     //validate varchar, varbinary, enum, set
                     String VARCHAR = "varchar";
                     String VARBINARY = "varbinary";
-                    String ENUM = "enum";
-                    String SET = "set";
+
                     int startParanthesis = columnDataType.indexOf("(");
                     String type = columnDataType.substring(0,startParanthesis);
                     String size = columnDataType.substring(startParanthesis + 1, columnDataType.length() - 1);
@@ -108,31 +113,15 @@ public class CreateTable {
                 }
                 if(isColumnNameCorrect && isColumnTypeCorrect && isColumnConstraintCorrect) {
                     tableFileWriter.write(columnName + "|");
-                    tableFileWriter.close();
-                    databaseMetaFileWriter.write(columnName + "|" + columnDataType + "|" + columnConstraint);
-                    databaseMetaFileWriter.close();
+                    databaseMetaFileWriter.write(columnName + "|" + columnDataType + "" +
+                            "|" + columnConstraint + "\n");
                 }
 
 
             }
         }
-
-        // 2. Logic to parse columns
-        // CREATE TABLE table (
-        // get input string and remove first three words
-        // if first index of ( is not zero then throw error and exit
-        // if last index of ) is not length - 1, throw error and exit
-        // extract text which is in between first index of ( and last index of )
-        // create an array split on comma
-        // each item should have 2/3 words -- column name, type, constraint(optional)
-        // each item should have minimum two words
-        // first word is column name
-        // match second word with datatypes constants, if no match then throw error
-        // validate brackets data types separately
-        // match third word with constraints enum, if no match then throw error
-
-        // type can be without size or with size(need to validate in that case)
-        // push columns in table.txt
+        tableFileWriter.close();
+        databaseMetaFileWriter.close();
     }
 
     public void createTable(String input) throws IOException {

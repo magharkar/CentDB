@@ -12,7 +12,6 @@ import java.util.Scanner;
 public class CreateDatabase {
 
     static final String CREATE_DATABASE_COMMAND = "Create database ";
-
     static final String DATABASES = "Databases";
     private static String name;
 
@@ -20,36 +19,39 @@ public class CreateDatabase {
         return name;
     }
     public void setDatabaseName(String newName) {
-        System.out.println("setter " + newName);
-        this.name = newName;
+        name = newName;
     }
 
     public void createDb(String inputString) throws IOException {
         String[] inputWords = inputString.split(" ");
 
-        String initializerString = inputWords[0] + " " + inputWords[1] + " ";
-        if(initializerString.equalsIgnoreCase(CREATE_DATABASE_COMMAND)) {
+        String createCommandString = inputWords[0] + " " + inputWords[1] + " ";
+        if(createCommandString.equalsIgnoreCase(CREATE_DATABASE_COMMAND)) {
             // create databases folder if it doesn't exist
             File databasesDirectory = new File(DATABASES);
-            databasesDirectory.mkdir();
+            if(!databasesDirectory.exists())
+            {
+                databasesDirectory.mkdir();
+            }
 
-            // create database.txt if it doesnt exist
-            File databasesMeta = new File("databases.txt");
-            boolean isNewlyCreated = databasesMeta.createNewFile();
-            FileWriter metaFileWriter = new FileWriter("databases.txt", true);
+            // create database.txt if it doesn't exist
+            File databasesMeta = new File("resources/databases.txt");
+            boolean isNewlyCreated = !databasesMeta.exists();
+            FileWriter metaFileWriter = new FileWriter("resources/databases.txt", true);
             if(isNewlyCreated) {
                 metaFileWriter.write("Databases\n");
                 metaFileWriter.flush();
             }
 
             //create folder with array[2] as name. if it exists, throw error
-            String databasePathDir = DATABASES + "//" + inputWords[2];
+            String databasePathDir = "resources/" + DATABASES + "//" + inputWords[2];
+            System.out.println(databasePathDir);
             File databaseDirectory = new File(databasePathDir);
             boolean folderCreated = databaseDirectory.mkdir();
             if(!folderCreated) {
                 System.out.println("This database already exists");
             } else {
-                metaFileWriter.write(inputWords[2] + "\n");
+                metaFileWriter.write("Database|" + inputWords[2] + "\n");
                 metaFileWriter.close();
                 // create db log file
                 File databaseLogFile = new File(databasePathDir + "//" + inputWords[2] + "-log.txt");

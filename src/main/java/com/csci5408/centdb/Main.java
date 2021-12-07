@@ -1,5 +1,6 @@
 package com.csci5408.centdb;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -53,9 +54,6 @@ public class Main {
         } else {
             System.out.println("Wrong Syntax");
         }
-
-
-
 
     }
 }
