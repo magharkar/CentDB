@@ -39,7 +39,7 @@ public class Main {
         } else {
             System.out.println("Wrong Syntaxooooo");
         }
-        System.out.println(database.getDatabaseName());
+      //  System.out.println(database.getDatabaseName());
         System.out.println("Query 3:");
 
         String input2 = scanner.nextLine();

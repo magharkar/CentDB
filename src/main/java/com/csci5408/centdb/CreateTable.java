@@ -128,7 +128,7 @@ public class CreateTable {
         String[] inputWords = input.split(" ");
         String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
       //  CreateDatabase db = new CreateDatabase();
-        String currentDatabase = CreateDatabase.getDatabaseName();
+        String currentDatabase = UseDatabase.getDatabaseName();
 
         if(currentDatabase == null) {
             System.out.println("Please perform use database query first");

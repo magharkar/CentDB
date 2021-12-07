@@ -13,14 +13,7 @@ public class CreateDatabase {
 
     static final String CREATE_DATABASE_COMMAND = "Create database ";
     static final String DATABASES = "Databases";
-    private static String name;
 
-    public static String getDatabaseName() {
-        return name;
-    }
-    public void setDatabaseName(String newName) {
-        name = newName;
-    }
 
     public void createDb(String inputString) throws IOException {
         String[] inputWords = inputString.split(" ");
@@ -59,7 +52,6 @@ public class CreateDatabase {
                 // create db metadata file
                 File databaseMetaFile = new File(databasePathDir + "//" + inputWords[2] + "-meta.txt");
                 databaseMetaFile.createNewFile();
-                name = inputWords[2];
             }
         } else  {
             System.out.println("Wrong Syntax");
