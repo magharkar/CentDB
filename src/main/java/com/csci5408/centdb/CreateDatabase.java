@@ -35,16 +35,16 @@ public class CreateDatabase {
             }
 
             // create database.txt if it doesn't exist
-            File databasesMeta = new File("resources/databases.txt");
-            boolean isNewlyCreated = !databasesMeta.exists();
-            FileWriter metaFileWriter = new FileWriter("resources/databases.txt", true);
+            File databasesMeta = new File("databases.txt");
+            boolean isNewlyCreated = databasesMeta.createNewFile();
+            FileWriter metaFileWriter = new FileWriter("databases.txt", true);
             if(isNewlyCreated) {
                 metaFileWriter.write("Databases\n");
                 metaFileWriter.flush();
             }
 
             //create folder with array[2] as name. if it exists, throw error
-            String databasePathDir = "resources/" + DATABASES + "//" + inputWords[2];
+            String databasePathDir =  DATABASES + "//" + inputWords[2];
             System.out.println(databasePathDir);
             File databaseDirectory = new File(databasePathDir);
             boolean folderCreated = databaseDirectory.mkdir();

@@ -126,14 +126,14 @@ public class CreateTable {
 
     public void createTable(String input) throws IOException {
         String[] inputWords = input.split(" ");
-        String initializerString = inputWords[0] + SPACE + inputWords[1] + SPACE;
+        String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
       //  CreateDatabase db = new CreateDatabase();
         String currentDatabase = CreateDatabase.getDatabaseName();
 
         if(currentDatabase == null) {
             System.out.println("Please perform use database query first");
         } else {
-            if(initializerString.equalsIgnoreCase(CREATE_TABLE_COMMAND) &&
+            if(createSyntax.equalsIgnoreCase(CREATE_TABLE_COMMAND) &&
                     input.lastIndexOf(')') == input.length() - 1) {
                 CreateTable createTable = new CreateTable();
                 String tableName = inputWords[2];
