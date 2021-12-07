@@ -1,4 +1,4 @@
-package com.csci5408.centdb.services;
+package com.csci5408.centdb.services.queryimplementation;
 
 import com.csci5408.centdb.model.Metadata;
 import com.csci5408.centdb.model.Query;

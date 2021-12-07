@@ -3,9 +3,9 @@
 //import java.io.IOException;
 //import java.util.Scanner;
 //
-//import com.csci5408.centdb.services.CreateDatabase;
-//import com.csci5408.centdb.services.CreateTable;
-//import com.csci5408.centdb.services.UseDatabase;
+//import com.csci5408.centdb.services.queryimplementation.CreateDatabase;
+//import com.csci5408.centdb.services.queryimplementation.CreateTable;
+//import com.csci5408.centdb.services.queryimplementation.UseDatabase;
 //
 //public class Main {
 //    public static void main(String args[]) throws IOException {

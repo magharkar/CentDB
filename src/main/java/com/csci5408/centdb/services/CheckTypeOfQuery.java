@@ -1,5 +1,10 @@
 package com.csci5408.centdb.services;
 
+import com.csci5408.centdb.services.queryimplementation.CreateDatabase;
+import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
+import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
+import com.csci5408.centdb.services.queryimplementation.UseDatabase;
+
 import java.io.IOException;
 
 public class CheckTypeOfQuery {

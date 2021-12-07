@@ -1,4 +1,4 @@
-package com.csci5408.centdb.services;
+package com.csci5408.centdb.services.analytics;
 
 import java.io.*;
 import java.util.*;
