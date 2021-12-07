@@ -5,7 +5,8 @@ import java.util.*;
 import java.util.regex.*;
 
 public class UpdateQuery {
-	public ArrayList<String> updateQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
+	public static Object updateQuery(String query, String databaseName, boolean persistentFileUpdate)
+			throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String line;
@@ -29,7 +30,7 @@ public class UpdateQuery {
 				while (matcher.find()) {
 					tableName = (matcher.group(1).trim());
 					tableNameLog = (matcher.group(1).trim());
-					tableName = databaseName + "\\" + tableName +".txt";
+					tableName = databaseName + "\\" + tableName + ".txt";
 				}
 
 				String regex1 = "set(.*?)where(.*?)";
@@ -40,7 +41,7 @@ public class UpdateQuery {
 				}
 
 				String[] string_where = query.split("where");
-				for(int i=0;i<string_where.length;i++) {
+				for (int i = 0; i < string_where.length; i++) {
 				}
 				whereCondition = string_where[1].trim();
 
@@ -79,23 +80,53 @@ public class UpdateQuery {
 							}
 						}
 
-						
 						String where_value = whereCondition.split("=")[1].trim();
 						String set_value = constraint.split("=")[1].trim();
-						
-						for (int i = 0; i < data.size(); i++) {
-							if (data.get(i).split("\\|")[positionWhere].trim().equals(where_value)) {
-								data.set(i, data.get(i).replaceAll(data.get(i).split("\\|")[position], set_value));
-							}
-						}
-
 						if (persistentFileUpdate) {
+							for (int i = 0; i < data.size(); i++) {
+								if (data.get(i).split("\\|")[positionWhere].trim().equals(where_value)) {
+									data.set(i, data.get(i).replaceAll(data.get(i).split("\\|")[position], set_value));
+								}
+							}
+
 							FileWriter writer = new FileWriter(tableName);
 							writer.write(columns.remove(0) + "\n");
 							for (String datum : data) {
 								writer.write(datum + "\n");
 							}
 							writer.close();
+						} else {
+							List<String[]> columnValuesList = new ArrayList<>();
+							String before_value = "";
+							Integer rowId = -1;
+							for (int i = 0; i < data.size(); i++) {
+								if (data.get(i).split("\\|")[positionWhere].trim().equals(where_value)) {
+									before_value = data.get(i).split("\\|")[position];
+									rowId = i + 1;
+									data.set(i, data.get(i).replaceAll(data.get(i).split("\\|")[position], set_value));
+									String[] columnValues = data.get(i).split("\\|");
+									columnValuesList.add(columnValues);
+								}
+							}
+							List<Map<String, String>> bufferPersistence = new ArrayList<>();
+							Map<String, String> columnData = new HashMap<>();
+							columnData.put("database", databaseName);
+							columnData.put("table", tableNameLog);
+							columnData.put("condition_column_name", whereCondition.split("=")[0]);
+							columnData.put("condition_column_value", whereCondition.split("=")[1]);
+							columnData.put("set_column_name", constraint.split("=")[0].trim());
+							columnData.put("after_value", constraint.split("=")[1].trim());
+							columnData.put("before_value", before_value);
+							columnData.put("row_id", rowId.toString());
+							String[] columnNames = columns.get(0).split("\\|");
+							for (int j = 0; j < columnValuesList.size(); j++) {
+								String[] columnValues = columnValuesList.get(j);
+								for (int k = 0; k < columnValues.length; k++) {
+									columnData.put(columnNames[k].trim(), columnValues[k].trim());
+								}
+							}
+							bufferPersistence.add(columnData);
+							return bufferPersistence;
 						}
 					} else {
 						System.out.println("No data in Table: " + tableName);
@@ -106,12 +137,12 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Update","Success", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog("Update", "Success", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Update","Failure", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog("Update", "Failure", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 				System.out.println(e);
 			}
@@ -119,7 +150,7 @@ public class UpdateQuery {
 			System.out.println("An update query unidentified!");
 		}
 		System.out.println("Update Query Completed!");
-		return data;
+		return "Update Query Completed!";
 	}
 
 }

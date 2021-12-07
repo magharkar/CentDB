@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.regex.*;
 
 public class DeleteQuery {
-	public void deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
+	public Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String tableName = "";
@@ -64,19 +64,33 @@ public class DeleteQuery {
 							}
 						}
 
-						for (int i = 0; i < data.size(); i++) {
-							if (data.get(i).split("\\|")[position].trim().equals(where_value)) {
-								data.remove(i);
-							}
-						}
-
 						if (persistentFileUpdate) {
+							for (int i = 0; i < data.size(); i++) {
+								if (data.get(i).split("\\|")[position].trim().equals(where_value)) {
+									data.remove(i);
+								}
+							}
 							FileWriter writer = new FileWriter(tableName);
 							writer.write(columns.remove(0) + "\n");
 							for (String datum : data) {
 								writer.write(datum + "\n");
 							}
 							writer.close();
+						} else {
+							Integer rowId = -1;
+							for (int i = 0; i < data.size(); i++) {
+								if (data.get(i).split("\\|")[position].trim().equals(where_value)) {
+									rowId = i;
+								}
+							}
+							List<Map<String, String>> bufferPersistence = new ArrayList<>();
+							Map<String, String> columnData = new HashMap<>();
+							columnData.put("database", databaseName);
+							columnData.put("table", tableNameLog);
+							columnData.put("rowId", rowId.toString());
+							columnData.put("where_condition", whereCondition);
+							bufferPersistence.add(columnData);
+							return bufferPersistence;
 						}
 					} else {
 						System.out.println("No data in Table: " + tableName);
@@ -100,5 +114,6 @@ public class DeleteQuery {
 			System.out.println("Delete query unidentified!");
 		}
 		System.out.println("Delete Query Completed!");
+		return "Delete Query Completed!";
 	}
 }
