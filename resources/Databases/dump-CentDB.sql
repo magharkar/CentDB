@@ -12,5 +12,5 @@ personId text foreign_key);
 --
 LOCK TABLES orders WRITE;
 INSERT INTO orders VALUES (orderId,orderNumber,personId)
-VALUES (orderId,orderNumber,personId)(1,77895,3)(2,44678,3);
+VALUES (1,77895,3),(2,44678,3);
 UNLOCK TABLES;
