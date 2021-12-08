@@ -1,10 +1,9 @@
 package com.csci5408.centdb.services.queryimplementation;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.services.UserService;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class InsertQuery {
 
-	public static Object insert(String inputQuery, String database, String dbName) {
+	public static Object insert(String inputQuery, String database, String dbName) throws IOException {
 		String query = inputQuery;
 		int columnCount = 0;
 		String primaryKey = "";
@@ -84,6 +83,9 @@ public class InsertQuery {
 					} else {
 						System.out.println("Input values count and Column count  mismatch");
 						flag = false;
+						QueryLogs queryLogs = new QueryLogs();
+						queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+								"NA", "NA", "NA");
 					}
 
 					String rows = br.readLine();
@@ -108,7 +110,11 @@ public class InsertQuery {
 						if (tableData.get(i).get(primaryKey).equals(newRowData.get(primaryKey))) {
 							System.out.println("Duplicate Primary Key" + tableData.get(i) + newRowData.get(primaryKey));
 							flag = false;
+							QueryLogs queryLogs = new QueryLogs();
+							queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+									"NA", "NA", "NA");
 							break;
+
 						}
 					}
 				}
@@ -128,6 +134,9 @@ public class InsertQuery {
 						} catch (Exception e) {
 							flag = false;
 							System.out.println("Incorrect Datatype");
+							QueryLogs queryLogs = new QueryLogs();
+							queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+									"NA", "NA", "NA");
 						}
 
 						newRow = newRow + newRowData.get(col) + "|";
@@ -136,17 +145,24 @@ public class InsertQuery {
 					if (flag)
 						bw.append(newRow);
 					bw.close();
+					QueryLogs queryLogs = new QueryLogs();
+					queryLogs.createQueryLog(UserService.getUserName(), "insert", "Success", dbName, table,
+							"NA", "1", "NA");
 				}
 
 			} else {
 				System.out.println(table + ": Table doesn't exist");
+				QueryLogs queryLogs = new QueryLogs();
+				queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+						"NA", "NA", "NA");
 			}
 
 		} catch (Exception e) {
 			System.out.println(e);
+			QueryLogs queryLogs = new QueryLogs();
+			queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+					"NA", "NA", "NA");
 		}
-
 		return null;
 	}
-
 }

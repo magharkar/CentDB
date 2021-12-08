@@ -33,9 +33,9 @@ public class CreateDatabase {
             }
 
             // create database.txt if it doesn't exist
-            File databasesMeta = new File("databases.txt");
+            File databasesMeta = new File("resources\\databases.txt");
             boolean isNewlyCreated = databasesMeta.createNewFile();
-            FileWriter metaFileWriter = new FileWriter("databases.txt", true);
+            FileWriter metaFileWriter = new FileWriter(databasesMeta, true);
             if(isNewlyCreated) {
                 metaFileWriter.write("Databases\n");
                 metaFileWriter.flush();

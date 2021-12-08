@@ -15,7 +15,7 @@ public class UseDatabase {
     public static String getDatabaseName() {
         return name;
     }
-    public void setDatabaseName(String newName) {
+    public static void setDatabaseName(String newName) {
         name = newName;
     }
     public static boolean isDatabaseSet(){

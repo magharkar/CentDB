@@ -7,7 +7,7 @@ public class QueryLogs {
                                String table_name, String column_affected, String row_affected,
                                String constraint) throws IOException {
         String query_log="";
-        File f = new File(database_name+"\\"+database_name+"_QueryLogs.txt");
+        File f = new File("resources+\\Databases\\"+database_name+"\\"+database_name+"_QueryLogs.txt");
         if(f.exists()) {
             BufferedReader br = new BufferedReader(new FileReader(f));
             if (br.readLine() == null) {
@@ -19,7 +19,7 @@ public class QueryLogs {
         }
         query_log = query_log+userId+"|"+query_type+"|"+status+"|"+database_name+"|"+table_name+"|"+column_affected+"|"
                 +row_affected+"|"+constraint+"|"+(new Date());
-        FileWriter writer = new FileWriter(database_name+"_QueryLogs.txt",true);
+        FileWriter writer = new FileWriter("resources\\Databases\\"+database_name+"\\"+database_name+"_QueryLogs.txt",true);
         writer.write(query_log+"\n");
         writer.close();
     }
