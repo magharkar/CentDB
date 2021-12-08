@@ -17,6 +17,7 @@ import com.csci5408.centdb.services.QueryValidator;
 import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
 import com.csci5408.centdb.services.queryimplementation.InsertQuery;
 import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
+import com.csci5408.centdb.services.queryimplementation.UseDatabase;
 
 public class Transactions {
 
@@ -46,7 +47,8 @@ public class Transactions {
 			String statement = commandsList.get(i);
 			if (statement.trim().startsWith("insert")) {
 				if (queryValidator.validateQuery(statement)) {
-					Object updatedResult = InsertQuery.insert(statement, database);
+					Object updatedResult = InsertQuery.insert(statement, database, UseDatabase.getDatabaseName(),
+							false);
 					addToBuffer(updatedResult, "insert");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
@@ -74,7 +76,6 @@ public class Transactions {
 					CommitToPersistence.commitToPersistenceFile(bufferPersistence, tableData);
 					transactionsList.add(createTransactionLog(null, "commit"));
 					bufferPersistence.clear();
-					System.out.println("Transaction completed and committed to database");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
 				}
@@ -94,7 +95,7 @@ public class Transactions {
 
 	private static void addTransactionLogs() throws IOException {
 		for (Transaction t : transactionsList) {
-			EventLogs.createTransactionLog(t, "test");
+			EventLogs.createTransactionLog(t, UseDatabase.getDatabaseName());
 		}
 	}
 
@@ -145,6 +146,7 @@ public class Transactions {
 				map.put("queryType", operation);
 				bufferPersistence.add(map);
 			}
+			System.out.println(bufferPersistence);
 			transactionsList.add(createTransactionLog(result, operation));
 		}
 	}

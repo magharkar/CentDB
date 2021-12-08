@@ -8,12 +8,13 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InsertQuery {
 
-	public static Object insert(String inputQuery, String database, String dbName) {
+	public static Object insert(String inputQuery, String database, String dbName, boolean persistentFileUpdate) {
 		String query = inputQuery;
 		int columnCount = 0;
 		String primaryKey = "";
@@ -114,28 +115,51 @@ public class InsertQuery {
 				}
 
 				if (flag) {
-					BufferedWriter bw = new BufferedWriter(new FileWriter(database + "\\" + table + ".txt", true));
-					bw.append(System.lineSeparator());
-					String newRow = "";
-					for (String col : columnNames) {
-						try {
-							if (dataTypes.get(col).equals("int")) {
-								Integer.parseInt(newRowData.get(col));
+					if (persistentFileUpdate) {
+						BufferedWriter bw = new BufferedWriter(new FileWriter(database + "\\" + table + ".txt", true));
+						bw.append(System.lineSeparator());
+						String newRow = "";
+						for (String col : columnNames) {
+							try {
+								if (dataTypes.get(col).equals("int")) {
+									Integer.parseInt(newRowData.get(col));
+								}
+								if (dataTypes.get(col).equals("float")) {
+									Float.parseFloat(newRowData.get(col));
+								}
+							} catch (Exception e) {
+								flag = false;
+								System.out.println("Incorrect Datatype");
 							}
-							if (dataTypes.get(col).equals("float")) {
-								Float.parseFloat(newRowData.get(col));
-							}
-						} catch (Exception e) {
-							flag = false;
-							System.out.println("Incorrect Datatype");
-						}
 
-						newRow = newRow + newRowData.get(col) + "|";
+							newRow = newRow + newRowData.get(col) + "|";
+						}
+						newRow = newRow.substring(0, newRow.length() - 1);
+						if (flag)
+							bw.append(newRow);
+						bw.close();
+					} else {
+						List<Map<String, String>> bufferPersistence = new ArrayList<>();
+						Map<String, String> columnData = new HashMap<>();
+						columnData.put("database", database);
+						columnData.put("table", table);
+						for (String col : columnNames) {
+							try {
+								if (dataTypes.get(col).equals("int")) {
+									Integer.parseInt(newRowData.get(col));
+								}
+								if (dataTypes.get(col).equals("float")) {
+									Float.parseFloat(newRowData.get(col));
+								}
+							} catch (Exception e) {
+								flag = false;
+								System.out.println("Incorrect Datatype");
+							}
+							columnData.put(col, newRowData.get(col));
+						}
+						bufferPersistence.add(columnData);
+						return bufferPersistence;
 					}
-					newRow = newRow.substring(0, newRow.length() - 1);
-					if (flag)
-						bw.append(newRow);
-					bw.close();
 				}
 
 			} else {
@@ -146,7 +170,7 @@ public class InsertQuery {
 			System.out.println(e);
 		}
 
-		return null;
+		return "Insertion Operation Completed";
 	}
 
 }
