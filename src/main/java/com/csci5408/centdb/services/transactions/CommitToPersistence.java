@@ -24,7 +24,7 @@ public class CommitToPersistence {
 	public static void commitToPersistenceFile(List<Map<String, String>> bufferPersistence,
 			Map<String, Map<String, String>> tableData) throws IOException {
 		TRANSACTION: for (Map<String, String> buffer : bufferPersistence) {
-			String fileName = "databases\\" + buffer.get("database") + "\\" + buffer.get("table") + ".txt";
+			String fileName = buffer.get("database") + "\\" + buffer.get("table") + ".txt";
 			File file = new File(fileName);
 			if (file.exists()) {
 				BufferedReader br = new BufferedReader(new FileReader(file));
@@ -36,7 +36,6 @@ public class CommitToPersistence {
 					tableMap.put(buffer.get("table"), content);
 					tableData.put(buffer.get("database"), tableMap);
 				}
-				System.out.println(content);
 				br.close();
 				if (buffer.get("queryType").equalsIgnoreCase("insert")) {
 					try {
@@ -58,7 +57,7 @@ public class CommitToPersistence {
 						break TRANSACTION;
 					}
 				}
-				if (buffer.get("queryType").equals("delete")) {
+				if (buffer.get("queryType").equalsIgnoreCase("delete")) {
 					try {
 						commitDeletedData(buffer, content, file);
 					} catch (Exception e) {
@@ -77,14 +76,14 @@ public class CommitToPersistence {
 		Integer rowsEffected = 0;
 		String[] columnNames = null;
 		BufferedReader br = new BufferedReader(
-				new FileReader("databases\\" + buffer.get("database") + "\\" + buffer.get("table") + ".txt"));
+				new FileReader(buffer.get("database") + "\\" + buffer.get("table") + ".txt"));
 		String columnName = br.readLine();
 		if (columnName != null) {
 			columnNames = columnName.split("\\|");
 		}
 		try {
 			BufferedWriter bw = new BufferedWriter(
-					new FileWriter("databases\\" + buffer.get("database") + "\\" + buffer.get("table") + ".txt", true));
+					new FileWriter(buffer.get("database") + "\\" + buffer.get("table") + ".txt", true));
 			bw.append(System.lineSeparator());
 			String newRow = "";
 			for (String col : columnNames) {
@@ -92,17 +91,16 @@ public class CommitToPersistence {
 				rowsEffected += 1;
 			}
 			newRow = newRow.substring(0, newRow.length() - 1);
-			System.out.println(newRow);
 			bw.append(newRow);
 			bw.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Insert Row", "Success", buffer.get("database"), buffer.get("table"),
-					"NA", "NA", "NA");
+			queryLogs.createQueryLog(UserService.getUserName(), "Insert Row", "Success", buffer.get("database"),
+					buffer.get("table"), "NA", "NA", "NA");
 			generateEventLogs(buffer, "insert", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Insert Row", "Failure", buffer.get("database"), buffer.get("table"),
-					"NA", "NA", "NA");
+			queryLogs.createQueryLog(UserService.getUserName(), "Insert Row", "Failure", buffer.get("database"),
+					buffer.get("table"), "NA", "NA", "NA");
 			throw e;
 		}
 	}
@@ -122,13 +120,13 @@ public class CommitToPersistence {
 			}
 			wr.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Success", buffer.get("database"), buffer.get("table"),
-					"NA", "NA", "where " + buffer.get("where_condition"));
+			queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Success", buffer.get("database"),
+					buffer.get("table"), "NA", "NA", "where " + buffer.get("where_condition"));
 			generateEventLogs(buffer, "delete", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Failure", buffer.get("database"), buffer.get("table"),
-					"NA", "NA", "where " + buffer.get("where_condition"));
+			queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Failure", buffer.get("database"),
+					buffer.get("table"), "NA", "NA", "where " + buffer.get("where_condition"));
 			throw e;
 		}
 	}
@@ -140,22 +138,22 @@ public class CommitToPersistence {
 		String conditionColumn = buffer.get("condition_column_name").trim();
 		String setColumn = buffer.get("set_column_name").trim();
 		String rows[] = content.split("\\n");
-		System.out.println(rows.length);
 		BufferedWriter wr = new BufferedWriter(new FileWriter(file));
 		String columnNames = rows[0];
 		String[] columns = columnNames.split("\\|");
 		Integer rowsEffected = 0;
 		for (int j = 0; j < columns.length; j++) {
 			String c = columns[j];
-			if (c.trim().replaceAll("\\r", "").equals(conditionColumn.trim().replaceAll("\\r", "")))
+			if (c.trim().replaceAll("\\r", "").equals(conditionColumn.trim().replaceAll("\\r", ""))) {
 				conditionindex = j;
+			}
 			if (c.trim().replaceAll("\\r", "").equals(setColumn.trim().replaceAll("\\r", ""))) {
 				setIndex = j;
 				rowsEffected += 1;
 			}
 		}
 		String columnsString = createString(columns);
-		wr.append(columnsString);
+		wr.write(columnsString + "\n");
 		int flag = 0;
 		// writing to persistence
 		try {
@@ -168,25 +166,26 @@ public class CommitToPersistence {
 							flag = 1;
 							values[setIndex] = buffer.get(setColumn);
 							st = createString(values);
-							wr.append(st);
-
+							wr.write(st + "\n");
 							continue ROW;
 						}
 					}
 				}
 				st = createString(values);
-				wr.append(st);
+				wr.write(st + "\n");
 			}
 			wr.close();
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Update", "Sucess", buffer.get("database"), buffer.get("table"),
-					buffer.get("set_column_name"), buffer.get("set_column_name") + "=" + buffer.get("after_value"),
+			queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", buffer.get("database"),
+					buffer.get("table"), buffer.get("set_column_name"),
+					buffer.get("set_column_name") + "=" + buffer.get("after_value"),
 					"where " + buffer.get("condition_column_name") + "=" + buffer.get(("condition_column_value")));
 			generateEventLogs(buffer, "update", rowsEffected.toString());
 		} catch (Exception e) {
 			QueryLogs queryLogs = new QueryLogs();
-			queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", buffer.get("database"), buffer.get("table"),
-					buffer.get("set_column_name"), buffer.get("set_column_name") + "=" + buffer.get("after_value"),
+			queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", buffer.get("database"),
+					buffer.get("table"), buffer.get("set_column_name"),
+					buffer.get("set_column_name") + "=" + buffer.get("after_value"),
 					"where " + buffer.get("condition_column_name") + "=" + buffer.get(("condition_column_value")));
 			throw e;
 		}
@@ -196,7 +195,7 @@ public class CommitToPersistence {
 		for (String database : tableData.keySet()) {
 			Map<String, String> table = tableData.get(database);
 			for (String s : table.keySet()) {
-				String tableName = "databases\\" + database + "\\" + s + ".txt";
+				String tableName = "resources\\Databases\\" + database + "\\" + s + ".txt";
 				File f = new File(tableName);
 				BufferedWriter writer = new BufferedWriter(new FileWriter(f));
 				writer.write(table.get(s));
@@ -208,7 +207,7 @@ public class CommitToPersistence {
 	private static String createString(String[] values) {
 		String st = "";
 		for (String s : values) {
-			st += s + "|";
+			st += s.replaceAll(" \"\" ", "") + "|";
 		}
 		return st.substring(0, st.length() - 1);
 	}

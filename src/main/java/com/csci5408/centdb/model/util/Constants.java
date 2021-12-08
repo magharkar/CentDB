@@ -9,7 +9,7 @@ public final class Constants {
     public static final List<String> SECURITY_QUESTIONS = Arrays.asList("What elementary school did you attend?","Who was your childhood hero?");
     public static final String CRASH_REPORT_PATH = "resources/CrashReports.txt";
     public static final String EVENT_LOG_PATH = "resources/EventLogs.txt";
-    public static final String TRANSACTION_LOG_PATH = "resources/%s/TransactionLogs.txt";
+    public static final String TRANSACTION_LOG_PATH = "resources/Databases/%s/TransactionLogs.txt";
     public static final String TABLE_PATH = "resources/Databases/%s/%s.txt";
     public static final String METADATA_PATH = "resources/Databases/%s/%s-meta.txt";
     public static final String EXPORT_PATH = "resources/Databases/dump-%s.sql";

@@ -1,25 +1,32 @@
 package com.csci5408.centdb.services;
 
+import static com.csci5408.centdb.model.util.Constants.SECURITY_QUESTIONS;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Scanner;
 
 import com.csci5408.centdb.model.User;
 import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
 import com.csci5408.centdb.services.analytics.Analytics;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
-
-import static com.csci5408.centdb.model.util.Constants.*;
+import com.csci5408.centdb.services.exportstructurevalue.ExportService;
+import com.csci5408.centdb.services.reverseengineering.ReverseEngineering;
 
 public class UserService {
 	FileSystemUserDao userDao;
 	static Scanner sc = new Scanner(System.in);
 	private static String name;
+
 	public static String getUserName() {
 		return name;
 	}
+
 	public void setUserName(String userName) {
 		name = userName;
 	}
@@ -27,7 +34,8 @@ public class UserService {
 	public UserService() throws IOException {
 		userDao = new FileSystemUserDao();
 	}
-	public void userAccessControl() throws IOException {
+
+	public void userAccessControl() throws Exception {
 		List<String> securityAnswers = new ArrayList<>();
 		ACCESS: do {
 			System.out.println("Please enter an option to continue\n1. Register\n2. Login\n3. Exit");
@@ -49,7 +57,7 @@ public class UserService {
 					user.setUserId(userId);
 					System.out.println("Enter password (min length : 8 characters)");
 					String password = sc.nextLine();
-					while (!isPasswordValid(password)){
+					while (!isPasswordValid(password)) {
 						System.out.println("Please enter a password with minimum 8 characters");
 						password = sc.nextLine();
 					}
@@ -79,14 +87,14 @@ public class UserService {
 				userInput = sc.nextLine();
 				registerUser.setPassword(userInput);
 				System.out.println("");
-				for (String securityQuestion: SECURITY_QUESTIONS) {
+				for (String securityQuestion : SECURITY_QUESTIONS) {
 					System.out.println(securityQuestion);
 					userInput = sc.nextLine();
 					securityAnswers.add(userInput);
 				}
 				registerUser.setSecurityAnswers(securityAnswers);
 				String errorMessage = userDao.userValidation(registerUser);
-				if(!errorMessage.equals("")){
+				if (!errorMessage.equals("")) {
 					System.out.println(errorMessage);
 					continue ACCESS;
 				}
@@ -102,15 +110,16 @@ public class UserService {
 		} while (true);
 	}
 
-	private static boolean isPasswordValid(String password){
+	private static boolean isPasswordValid(String password) {
 		return password.length() > 8;
 	}
-	private static void userOperations() throws IOException {
+
+	private static void userOperations() throws Exception {
 		CheckTypeOfQuery checkTypeOfQuery = new CheckTypeOfQuery();
 		boolean validateQuery = false;
 		do {
 			System.out.println(
-					"Please select an operation to perform\n1. Write Queries\r\n2. Export\r\n3. Data Model\r\n4. Analytics\r\n5. Logout");
+					"\nPlease select an operation to perform\n1. Write Queries\r\n2. Export\r\n3. Data Model\r\n4. Analytics\r\n5. Logout");
 			int ch = sc.nextInt();
 			switch (ch) {
 			case 1:
@@ -121,16 +130,34 @@ public class UserService {
 				query = scanner.nextLine();
 				QueryValidator queryValidator = new QueryValidator();
 				validateQuery = queryValidator.validateQuery(query);
-				System.out.println("Query Validation"+validateQuery);
-				if(validateQuery) {
+				System.out.println("Query Validation " + validateQuery);
+				if (validateQuery) {
 					checkTypeOfQuery.checkTypeOfQuery(query);
 				}
 				break;
 			case 2:
-				// code for exporting the dumps
+				ExportService exportService = new ExportService();
+				exportService.createExport();
 				break;
 			case 3:
-				// code for returning the data model
+				System.out.println("Here are the databases... ");
+				BufferedReader br = new BufferedReader(new FileReader("databases.txt"));
+				String line = null;
+				int count = 0;
+				Map<Integer, String> databaseMap = new HashMap<>();
+				while ((line = br.readLine()) != null) {
+					String st[] = line.split("\\|");
+					if (st.length > 1) {
+						count += 1;
+						databaseMap.put(count, st[1]);
+					}
+				}
+				for (Integer i : databaseMap.keySet()) {
+					System.out.println(i + "." + databaseMap.get(i));
+				}
+				System.out.println("Please choose the databse to get the data model(reverse engineer)");
+				int choice = sc.nextInt();
+				ReverseEngineering.reverseEngineer(databaseMap.get(choice));
 				break;
 			case 4:
 				Analytics analytics = new Analytics();

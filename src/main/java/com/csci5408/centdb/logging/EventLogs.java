@@ -16,6 +16,7 @@ public class EventLogs {
         try{
             FileWriter fileWriter;
             File file = new File(String.format(TRANSACTION_LOG_PATH,databaseName));
+            System.out.println(file);
             if(!file.exists()){
                 file.createNewFile();
             }
