@@ -35,6 +35,7 @@ public class Transactions {
 
 		String[] commands = query.split(";");
 		List<String> commandsList = Arrays.asList(commands);
+		COMMAND:
 		for (int i = 0; i < commandsList.size(); i++) {
 			if (i == 0) {
 				currentPointer = null;
@@ -51,6 +52,10 @@ public class Transactions {
 
 					Object updatedResult = InsertQuery.insert(statement, database, UseDatabase.getDatabaseName(),
 							false);
+					if (updatedResult instanceof String) {
+						System.out.println("Aborting the transaction");
+						break COMMAND;
+					}
 
 					addToBuffer(updatedResult, "insert");
 				} else {
@@ -61,6 +66,12 @@ public class Transactions {
 			{
 				if (queryValidator.validateQuery(statement)) {
 					Object updatedResult = UpdateQuery.updateQuery(statement, database, false);
+
+					if (updatedResult instanceof String) {
+						System.out.println("Aborting the transaction");
+						break COMMAND;
+					}
+
 					addToBuffer(updatedResult, "update");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
@@ -69,6 +80,12 @@ public class Transactions {
 			} else if (statement.trim().startsWith("delete")) {
 				if (queryValidator.validateQuery(statement)) {
 					Object rowToBeDeleted = DeleteQuery.deleteQuery(statement, database, false);
+
+					if (rowToBeDeleted instanceof String) {
+						System.out.println("Aborting the transaction");
+						break COMMAND;
+					}
+
 					addToBuffer(rowToBeDeleted, "delete");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
