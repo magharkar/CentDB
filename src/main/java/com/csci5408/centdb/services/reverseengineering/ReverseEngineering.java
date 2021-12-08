@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class ReverseEngineering {
 
-	static final String delimiter = "\n\n";
+	static final String delimiter = "\n";
 
 	public static void reverseEngineer(String database) throws IOException {
 
 		List<Map<String, String>> foreignKeys = new ArrayList<>();
-		String fileName = "Databases\\" + database + "\\" + database + "-meta.txt";
+		String fileName = "resources\\Databases\\" + database + "\\" + database + "-meta.txt";
 		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 			BufferedWriter bw = new BufferedWriter(new FileWriter("resources\\" + database + "-structure.txt"));
 			String line;
@@ -93,9 +93,9 @@ public class ReverseEngineering {
 		String cardinality = "";
 		List<String> cardinalityList = new ArrayList<>();
 		for (Map<String, String> data : foreignKeys) {
-			String table = "Databases\\" + database + "\\" + data.get("Table") + ".txt";
+			String table = "resources\\Databases\\" + database + "\\" + data.get("Table") + ".txt";
 			String id = data.get("Key");
-			String referencedTable = "Databases\\" + database + "\\" + data.get("Referenced Table") + ".txt";
+			String referencedTable = "resources\\Databases\\" + database + "\\" + data.get("Referenced Table") + ".txt";
 			String referencedId = data.get("Referenced Key");
 			BufferedReader tableReader = new BufferedReader(new FileReader(table));
 			BufferedReader referencedTableReader = new BufferedReader(new FileReader(referencedTable));

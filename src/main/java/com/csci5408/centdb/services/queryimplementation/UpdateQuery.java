@@ -1,12 +1,20 @@
 package com.csci5408.centdb.services.queryimplementation;
 
-import com.csci5408.centdb.logging.QueryLogs;
-import com.csci5408.centdb.model.User;
-import com.csci5408.centdb.services.UserService;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
+import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.services.UserService;
 
 public class UpdateQuery {
 	public static Object updateQuery(String query, String databaseName, boolean persistentFileUpdate)
@@ -103,8 +111,10 @@ public class UpdateQuery {
 							List<String[]> columnValuesList = new ArrayList<>();
 							String before_value = "";
 							Integer rowId = -1;
+							System.out.println(data.size());
 							for (int i = 0; i < data.size(); i++) {
 								if (data.get(i).split("\\|")[positionWhere].trim().equals(where_value)) {
+									System.out.println("update if");
 									before_value = data.get(i).split("\\|")[position];
 									rowId = i + 1;
 									data.set(i, data.get(i).replaceAll(data.get(i).split("\\|")[position], set_value));
@@ -129,7 +139,9 @@ public class UpdateQuery {
 									columnData.put(columnNames[k].trim(), columnValues[k].trim());
 								}
 							}
+							System.out.println(columnData.size());
 							bufferPersistence.add(columnData);
+							System.out.println(bufferPersistence);
 							return bufferPersistence;
 						}
 					} else {
@@ -141,13 +153,13 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog, constraint.split("=")[0],
-						constraint, "where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog,
+						constraint.split("=")[0], constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog, constraint.split("=")[0],
-						constraint, "where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog,
+						constraint.split("=")[0], constraint, "where " + whereCondition);
 				System.out.println(e);
 			}
 		} else {
