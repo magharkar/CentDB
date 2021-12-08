@@ -248,9 +248,7 @@ public class CreateTable {
         String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
         //  CreateDatabase db = new CreateDatabase();
         String currentDatabase = UseDatabase.getDatabaseName();
-        if(currentDatabase == null) {
-            System.out.println("Please perform use database query first");
-        } else {
+        if(Objects.nonNull(currentDatabase)) {
             if(createSyntax.equalsIgnoreCase(CREATE_TABLE_COMMAND) &&
                     input.lastIndexOf(')') == input.length() - 1) {
                 CreateTable createTable = new CreateTable();

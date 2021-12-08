@@ -5,6 +5,7 @@ public class QueryValidator {
 
 	Pattern pattern = Pattern.compile("(select (.*?) from(.*?)(where.*)?)|"
 			+ "(delete (.*?)from(.*?)(where.*)?)|"
+			+ "(drop\\ *table\\s.*)|"
 			+ "(insert into(.*?) values \\((.*?))\\)|"
 			+ "(update (.*?) set (.*?) where (.*?))|"
 			+"(show dbs)|"

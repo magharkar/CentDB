@@ -18,6 +18,13 @@ public class UseDatabase {
     public static void setDatabaseName(String newName) {
         name = newName;
     }
+    public static boolean isDatabaseSet(){
+        String currentDatabase = UseDatabase.getDatabaseName();
+        if(currentDatabase == null) {
+            return false;
+        }
+        return true;
+    }
     public void use(String input) throws IOException {
         String[] inputWords = input.split(" ");
         // use database syntax will have length 2
@@ -25,7 +32,7 @@ public class UseDatabase {
         System.out.println(initializerString);
         if(initializerString.equalsIgnoreCase(USE_DATABASE_COMMAND)) {
             // set path of the db with name array[1]. if it doesn't exist, throw error
-            Path path = Paths.get("resources\\Databases\\" + inputWords[1]);
+            Path path = Paths.get("resources/Databases/" + inputWords[1]);
             if(!Files.exists(path)) {
                 System.out.println("This database does not exist");
                 QueryLogs queryLogs = new QueryLogs();
