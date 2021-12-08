@@ -7,9 +7,9 @@ public class QueryLogs {
                                String table_name, String column_affected, String row_affected,
                                String constraint) throws IOException {
         String query_log="";
-        File f = new File(database_name+"\\"+database_name+"_logs.txt");
+        File f = new File(database_name+"\\"+database_name+"_QueryLogs.txt");
         if(f.exists()) {
-            BufferedReader br = new BufferedReader(new FileReader(database_name+"\\"+database_name+"_logs.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(f));
             if (br.readLine() == null) {
                 query_log = "User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp\n";
             }

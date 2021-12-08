@@ -3,6 +3,7 @@ package com.csci5408.centdb.services;
 
 import com.csci5408.centdb.model.User;
 import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
+import com.csci5408.centdb.services.analytics.Analytics;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -132,7 +133,8 @@ public class UserService {
 				// code for returning the data model
 				break;
 			case 4:
-				// code for analytics
+				Analytics analytics = new Analytics();
+				analytics.countQueries("resources\\Databases");
 				break;
 			case 5:
 				System.out.println("Logging out. Thank you!");
