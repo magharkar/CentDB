@@ -1,6 +1,8 @@
 package com.csci5408.centdb.services.queryimplementation;
 
 import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.model.User;
+import com.csci5408.centdb.services.UserService;
 
 import java.io.*;
 import java.util.*;
@@ -139,12 +141,12 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Update", "Success", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Update", "Failure", databaseName, tableNameLog, constraint.split("=")[0],
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog, constraint.split("=")[0],
 						constraint, "where " + whereCondition);
 				System.out.println(e);
 			}

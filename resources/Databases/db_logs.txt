@@ -2,3 +2,9 @@ Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Conditio
 Success|Update|resources\Databases\db|t1|num|num=3|where name=aabhaas|Wed Dec 08 07:44:21 IST 2021
 Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
 Success|Delete Row|resources\Databases\db|t1|NA|NA|where num=2|Wed Dec 08 07:46:21 IST 2021
+userUser|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+Success|Delete Row|resources\Databases\db|t1|NA|NA|where num=1|Wed Dec 08 08:40:29 IST 2021
+userUser|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+Success|Update|resources\Databases\db|t1|num|num=1|where name=tanvi|Wed Dec 08 08:46:14 IST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+user|Success|Update|resources\Databases\db|t1|num|num=2|where name=tanvi|Wed Dec 08 08:48:08 IST 2021

@@ -15,6 +15,13 @@ import static com.csci5408.centdb.model.util.Constants.*;
 public class UserService {
 	FileSystemUserDao userDao;
 	static Scanner sc = new Scanner(System.in);
+	private static String name;
+	public static String getUserName() {
+		return name;
+	}
+	public void setUserName(String userName) {
+		name = userName;
+	}
 
 	public UserService() throws IOException {
 		userDao = new FileSystemUserDao();
@@ -82,6 +89,7 @@ public class UserService {
 					System.out.println(errorMessage);
 					continue ACCESS;
 				}
+				setUserName(registerUser.getUserId());
 				System.out.println("Successfully logged in!");
 				userOperations();
 				break;
@@ -94,10 +102,7 @@ public class UserService {
 	}
 
 	private static boolean isPasswordValid(String password){
-		if(password.length() > 8){
-			return true;
-		}
-		return false;
+		return password.length() > 8;
 	}
 	private static void userOperations() throws IOException {
 		CheckTypeOfQuery checkTypeOfQuery = new CheckTypeOfQuery();

@@ -1,6 +1,8 @@
 package com.csci5408.centdb.services.queryimplementation;
 
 import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.model.User;
+import com.csci5408.centdb.services.UserService;
 
 import java.io.*;
 import java.util.*;
@@ -103,12 +105,12 @@ public class DeleteQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Delete Row", "Success", databaseName, tableNameLog, "NA", "NA",
+				queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Success", databaseName, tableNameLog, "NA", "NA",
 						"where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog("Delete Table Row", "Failure", databaseName, tableNameLog, "NA", "NA",
+				queryLogs.createQueryLog(UserService.getUserName(),"Delete Table Row", "Failure", databaseName, tableNameLog, "NA", "NA",
 						"where " + whereCondition);
 				System.out.println(e);
 			}
