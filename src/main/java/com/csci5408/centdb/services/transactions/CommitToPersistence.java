@@ -88,8 +88,8 @@ public class CommitToPersistence {
 			String newRow = "";
 			for (String col : columnNames) {
 				newRow = newRow + buffer.get(col) + "|";
-				rowsEffected += 1;
 			}
+			rowsEffected += 1;
 			newRow = newRow.substring(0, newRow.length() - 1);
 			bw.append(newRow);
 			bw.close();

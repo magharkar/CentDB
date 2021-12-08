@@ -7,12 +7,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InsertQuery {
 
-	public static Object insert(String inputQuery, String database, String dbName) throws IOException {
+	public static Object insert(String inputQuery, String database, String dbName, boolean persistentFileUpdate) throws IOException {
 		String query = inputQuery;
 		int columnCount = 0;
 		String primaryKey = "";
@@ -82,10 +83,10 @@ public class InsertQuery {
 						}
 					} else {
 						System.out.println("Input values count and Column count  mismatch");
-						flag = false;
 						QueryLogs queryLogs = new QueryLogs();
 						queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
 								"NA", "NA", "NA");
+						flag = false;
 					}
 
 					String rows = br.readLine();
@@ -114,40 +115,65 @@ public class InsertQuery {
 							queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
 									"NA", "NA", "NA");
 							break;
-
 						}
 					}
 				}
 
 				if (flag) {
-					BufferedWriter bw = new BufferedWriter(new FileWriter(database + "\\" + table + ".txt", true));
-					bw.append(System.lineSeparator());
-					String newRow = "";
-					for (String col : columnNames) {
-						try {
-							if (dataTypes.get(col).equals("int")) {
-								Integer.parseInt(newRowData.get(col));
+					if (persistentFileUpdate) {
+						BufferedWriter bw = new BufferedWriter(new FileWriter(database + "\\" + table + ".txt", true));
+						bw.append(System.lineSeparator());
+						String newRow = "";
+						for (String col : columnNames) {
+							try {
+								if (dataTypes.get(col).equals("int")) {
+									Integer.parseInt(newRowData.get(col));
+								}
+								if (dataTypes.get(col).equals("float")) {
+									Float.parseFloat(newRowData.get(col));
+								}
+							} catch (Exception e) {
+								flag = false;
+								System.out.println("Incorrect Datatype");
+								QueryLogs queryLogs = new QueryLogs();
+								queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+										"NA", "NA", "NA");
 							}
-							if (dataTypes.get(col).equals("float")) {
-								Float.parseFloat(newRowData.get(col));
-							}
-						} catch (Exception e) {
-							flag = false;
-							System.out.println("Incorrect Datatype");
-							QueryLogs queryLogs = new QueryLogs();
-							queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
-									"NA", "NA", "NA");
-						}
 
-						newRow = newRow + newRowData.get(col) + "|";
+							newRow = newRow + newRowData.get(col) + "|";
+						}
+						newRow = newRow.substring(0, newRow.length() - 1);
+						if (flag)
+							bw.append(newRow);
+						bw.close();
+						QueryLogs queryLogs = new QueryLogs();
+						queryLogs.createQueryLog(UserService.getUserName(), "insert", "success", dbName, table,
+								"NA", "NA", "NA");
+					} else {
+						List<Map<String, String>> bufferPersistence = new ArrayList<>();
+						Map<String, String> columnData = new HashMap<>();
+						columnData.put("database", database);
+						columnData.put("table", table);
+						for (String col : columnNames) {
+							try {
+								if (dataTypes.get(col).equals("int")) {
+									Integer.parseInt(newRowData.get(col));
+								}
+								if (dataTypes.get(col).equals("float")) {
+									Float.parseFloat(newRowData.get(col));
+								}
+							} catch (Exception e) {
+								flag = false;
+								System.out.println("Incorrect Datatype");
+								QueryLogs queryLogs = new QueryLogs();
+								queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
+										"NA", "NA", "NA");
+							}
+							columnData.put(col, newRowData.get(col));
+						}
+						bufferPersistence.add(columnData);
+						return bufferPersistence;
 					}
-					newRow = newRow.substring(0, newRow.length() - 1);
-					if (flag)
-						bw.append(newRow);
-					bw.close();
-					QueryLogs queryLogs = new QueryLogs();
-					queryLogs.createQueryLog(UserService.getUserName(), "insert", "Success", dbName, table,
-							"NA", "1", "NA");
 				}
 
 			} else {
@@ -163,6 +189,8 @@ public class InsertQuery {
 			queryLogs.createQueryLog(UserService.getUserName(), "insert", "failure", dbName, table,
 					"NA", "NA", "NA");
 		}
-		return null;
+
+		return "Insertion Operation Completed";
 	}
+
 }
