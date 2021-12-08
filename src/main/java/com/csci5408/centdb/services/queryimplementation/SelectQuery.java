@@ -43,9 +43,9 @@ public class SelectQuery {
             condition = string_where[1].trim();
             System.out.println("333" + " " + condition);
 
-            File f = new File(table + ".txt");
+            File f = new File(database+"\\"+table + ".txt");
             if (f.exists()) {
-                BufferedReader br = new BufferedReader(new FileReader(table + ".txt"));
+                BufferedReader br = new BufferedReader(new FileReader(database+"\\"+table + ".txt"));
                 String columnName = br.readLine();
                 String row = br.readLine();
 

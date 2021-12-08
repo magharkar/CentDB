@@ -40,5 +40,9 @@ public class CheckTypeOfQuery {
 			System.out.println("inside drop table");
 			InsertQuery.insert(query, "resources\\Databases\\"+UseDatabase.getDatabaseName());
 		}
+		else if(querySplitArray[0].equalsIgnoreCase("select")) {
+			System.out.println("inside select table");
+			SelectQuery.select(query, "resources\\Databases\\"+UseDatabase.getDatabaseName());
+		}
 	}
 }
