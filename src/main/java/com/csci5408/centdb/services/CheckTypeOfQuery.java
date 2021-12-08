@@ -34,11 +34,11 @@ public class CheckTypeOfQuery {
 		}
 		else if(querySplitArray[0].equalsIgnoreCase("insert") && querySplitArray[1].equalsIgnoreCase("into") ) {
 			System.out.println("inside insert table");
-			InsertQuery.insert(query, "resources\\Databases\\"+UseDatabase.getDatabaseName());
+			InsertQuery.insert(query, "resources\\Databases\\"+UseDatabase.getDatabaseName(),UseDatabase.getDatabaseName());
 		}
 		else if(querySplitArray[0].equalsIgnoreCase("drop")) {
 			System.out.println("inside drop table");
-			InsertQuery.insert(query, "resources\\Databases\\"+UseDatabase.getDatabaseName());
+			//DROP query
 		}
 		else if(querySplitArray[0].equalsIgnoreCase("select")) {
 			System.out.println("inside select table");
