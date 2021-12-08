@@ -26,16 +26,12 @@ public class Analytics {
         File dir = new File(masterFolder);
         files = dir.listFiles();
         for (File file : files) {
-            System.out.println(file);
             if (file.isDirectory()) {
                 databaseFolder = file;
                 databaseName = file.toString().split("\\\\")[file.toString().split("\\\\").length - 1];
                 logFileName = databaseName + "_QueryLogs.txt";
-                try {
-                     br = new BufferedReader(new FileReader(masterFolder + "\\" + logFileName));
-                }catch (Exception e){
-                    System.out.println("Query logs file for database :"+file+" doesn't exit");
-                }
+                br = new BufferedReader(new FileReader(file + "\\" + logFileName));
+
                 StringTokenizer st1 = new StringTokenizer(br.readLine(), "\t");
                 while (st1.hasMoreTokens()) {
                     columns.add(st1.nextToken());
@@ -89,10 +85,5 @@ public class Analytics {
             countQueries = 0;
             System.out.println("\n");
         }
-    }
-    public static void main(String[] args) throws Exception {
-
-        Analytics analytics = new Analytics();
-        analytics.countQueries("resources\\Databases");
     }
 }

@@ -1,14 +1,6 @@
 package com.csci5408.centdb.services;
 
-import java.io.IOException;
-
-import com.csci5408.centdb.services.queryimplementation.CreateDatabase;
-import com.csci5408.centdb.services.queryimplementation.CreateTable;
-import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
-import com.csci5408.centdb.services.queryimplementation.InsertQuery;
-import com.csci5408.centdb.services.queryimplementation.SelectQuery;
-import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
-import com.csci5408.centdb.services.queryimplementation.UseDatabase;
+import com.csci5408.centdb.services.queryimplementation.*;
 import com.csci5408.centdb.services.transactions.Transactions;
 
 public class CheckTypeOfQuery {
@@ -40,7 +32,8 @@ public class CheckTypeOfQuery {
 			InsertQuery.insert(query, "resources\\Databases\\"+UseDatabase.getDatabaseName(),UseDatabase.getDatabaseName());
 		} else if (querySplitArray[0].equalsIgnoreCase("drop")) {
 			System.out.println("inside drop table");
-			//drop
+			DropTable dropTable =  new DropTable();
+			dropTable.dropTable(query);
 		} else if (querySplitArray[0].equalsIgnoreCase("select")) {
 			System.out.println("inside select table");
 			SelectQuery.select(query, "resources\\Databases\\" + UseDatabase.getDatabaseName());

@@ -2,4 +2,5 @@ Table|t1
 num|int|primary_key
 name|text|
 Table|t2
-num|int|
+numfk|int|foreign_key|t1|num
+name|text|

@@ -1,8 +1,12 @@
 package com.csci5408.centdb.services.queryimplementation;
 
+import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.services.UserService;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class SelectQuery {
 
-	public static void select(String inputQuery, String database) {
+	public static void select(String inputQuery, String database) throws IOException {
 		String query = inputQuery;
 		String db = database;
 		String columnString = "";
@@ -26,6 +30,8 @@ public class SelectQuery {
 		List<String> displayColumns = new ArrayList<String>();
 		Boolean columnFlag = true;
 		Boolean where = false;
+		String dbName = "";
+		Integer count = 0;
 		try {
 
 			String regex = "select(.*?)from(.*?)";
@@ -80,15 +86,24 @@ public class SelectQuery {
 
 				} else {
 					System.out.println("No data in Table: " + table);
+					QueryLogs queryLogs = new QueryLogs();
+					queryLogs.createQueryLog(UserService.getUserName(), "select", "failure", dbName, table,
+							"NA", "NA", condition);
 				}
 				br.close();
 			} else {
 				System.out.println(table + ": Table doesn't exist");
+				QueryLogs queryLogs = new QueryLogs();
+				queryLogs.createQueryLog(UserService.getUserName(), "select", "failure", dbName, table,
+						"NA", "NA", condition);
 			}
 			if (columnNames.contains(conditionalColumn)) {
 				where = true;
 			} else {
 				System.out.println("Invalid where column");
+				QueryLogs queryLogs = new QueryLogs();
+				queryLogs.createQueryLog(UserService.getUserName(), "select", "failure", dbName, table,
+						"NA", "NA", condition);
 			}
 			if (columnString.equals("*")) {
 				displayColumns = columnNames;
@@ -114,14 +129,26 @@ public class SelectQuery {
 							System.out.print(tableData.get(i).get(key) + "       ");
 						}
 						System.out.println();
+						count++;
 						}
 					}
+					QueryLogs queryLogs = new QueryLogs();
+					dbName = database.split("\\\\")[2];
+					System.out.println(dbName);
+					queryLogs.createQueryLog(UserService.getUserName(), "select", "Success", dbName, table,
+							"NA", "NA", condition);
 				} else {
 					System.out.println("Column name does not exist");
+					QueryLogs queryLogs = new QueryLogs();
+					queryLogs.createQueryLog(UserService.getUserName(), "select", "failure", dbName, table,
+							"NA", "NA", condition);
 				}
 			}
 		} catch (Exception e) {
 			System.out.println(e);
+			QueryLogs queryLogs = new QueryLogs();
+			queryLogs.createQueryLog(UserService.getUserName(), "select", "failure", dbName, table,
+					"NA", "NA", condition);
 		}
 
 	}
