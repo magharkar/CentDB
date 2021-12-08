@@ -5,4 +5,14 @@ userId|password|elementary school|childhood hero
 14|KiOxVTADJdmZC+Dl4oFeZQ==|hrs|ww
 1|qlwJyOgU7oa+vsSCyjDVbg==|hrs|ww
 1305|SQMKn5TiTo3P3mqHYlSLiQ==|hrs|ww
+<<<<<<< Updated upstream
 1306|JOXtSqLV2iw1epY7WI0U+w==|134|12
+=======
+1306|JOXtSqLV2iw1epY7WI0U+w==|134|12
+tanvi|null|dav|tanvi
+pruthi|null|test|test
+test|null|dav|test
+poiuy|P0byy7adtsZIAJabDIWzKw==|dat|sdhs
+user|025jdKr20ToDQTQWGT9nkw==|test|test
+m|j7YeoeR5lBvAgBBAhi4i9A==|m|m
+>>>>>>> Stashed changes

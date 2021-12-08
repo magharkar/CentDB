@@ -3,16 +3,16 @@ package com.csci5408.centdb;
 import com.csci5408.enums.ColumnConstraints;
 import com.csci5408.enums.ColumnDataTypes;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CreateTable {
     static  String CREATE_TABLE_COMMAND = "Create table ";
     static  String SPACE = " ";
     static  String DELIMITER = "|";
+    static String REFERENCES = "REFERENCES";
 
     ArrayList<String> columnNames = new ArrayList<>();
     ArrayList<String[]> columns = new ArrayList<>();
@@ -30,7 +30,7 @@ public class CreateTable {
         }
         else {
             System.out.println(inputString);
-            boolean success = validateColumns(inputString, tableName);
+            boolean success = validateColumns(inputString, tableName, databaseMetaPath);
             if(success) {
                 FileWriter databaseMetaFileWriter = new FileWriter(databaseMetaPath, true);
                 FileWriter tableFileWriter = new FileWriter(tableFilePath, true);
@@ -39,19 +39,22 @@ public class CreateTable {
                 for(int i = 0; i< columns.size(); i++) {
                     String[] column = columns.get(i);
                     tableFileWriter.write(column[0] + "|");
-                    databaseMetaFileWriter.write(column[0] + "|" + column[1] + "|" + column[2] + "\n");
+                    if(column.length == 3) {
+                        databaseMetaFileWriter.write(column[0] + "|" + column[1] + "|" + column[2] + "\n");
+                    }
+                    else {
+                        databaseMetaFileWriter.write(column[0] + "|" + column[1] + "|" + column[2] +  "|" + column[3] + "|" + column[4] +"\n");
+                    }
                 }
                 tableFileWriter.close();
                 databaseMetaFileWriter.close();
             }
 
-         //   validateAndSetColumns(inputString, tableFilePath, databaseMetaPath, tableName);
-
         }
 
     }
 
-    public boolean validateColumns(String inputString, String table) {
+    public boolean validateColumns(String inputString, String table, String databaseMetaPath) throws FileNotFoundException {
 
         int startParanthesisIndex = inputString.indexOf('(');
         int endParanthesisIndex = inputString.lastIndexOf(')');
@@ -121,31 +124,66 @@ public class CreateTable {
                 }
 
 
-                if(columnWords.length == 3)  {
-                    columnConstraint = columnWords[2];
+                String foreignTableColumn = "";
+                String foreignTableName = "";
+
+                if(columnWords.length >= 3)  {
                     boolean isConstraintMatched = false;
-                    for (ColumnConstraints columnConstraintEnum : ColumnConstraints.values()) {
-                        if(columnConstraint.equalsIgnoreCase(columnConstraintEnum.toString())) {
-                            isConstraintMatched = true;
+                    columnConstraint = columnWords[2];
+
+                    if(columnWords.length == 3) {
+                        for (ColumnConstraints columnConstraintEnum : ColumnConstraints.values()) {
+                            if(columnConstraint.equalsIgnoreCase(columnConstraintEnum.toString())) {
+                                isConstraintMatched = true;
+                            }
                         }
                     }
+
+                    if(columnWords.length > 3) {
+                        int inputLength = columnWords.length;
+                        if(inputLength == 5 &&
+                                columnWords[2].equalsIgnoreCase(ColumnConstraints.FOREIGN_KEY.toString()) &&
+                                columnWords[3].equalsIgnoreCase(REFERENCES)) {
+                            String foreignTableData = columnWords[4];
+                            int startIndex = foreignTableData.indexOf('(');
+                            int endIndex = foreignTableData.lastIndexOf(')');
+                            if(endIndex != foreignTableData.length() - 1) {
+                                isConstraintMatched = false;
+                                return false;
+                            } else {
+                                foreignTableColumn  = foreignTableData.substring(startIndex + 1, endIndex).trim();
+                                foreignTableName = foreignTableData.substring(0, startIndex);
+                                boolean columnFound = isForeignKeyValid(databaseMetaPath, foreignTableName, foreignTableColumn, columnDataType);
+                                System.out.println(columnFound);
+                                if(columnFound) {
+                                    isConstraintMatched = true;
+                                }
+                            }
+                        }
+                    }
+
                     if (!isConstraintMatched) {
                         isColumnConstraintCorrect = false;
                         return false;
                     }
                     //validate columnwords[2]
                 }
+
                 if(isColumnNameCorrect && isColumnTypeCorrect && isColumnConstraintCorrect) {
-                    String[] column = {columnName, columnDataType, columnConstraint};
-                    columns.add(column);
-//                    tableFileWriter.write(columnName + "|");
-//                    databaseMetaFileWriter.write(columnName + "|" + columnDataType + "" +
-//                            "|" + columnConstraint + "\n");
+
+                    if(columnWords.length <= 3) {
+                        String[] column = {columnName, columnDataType, columnConstraint};
+                        columns.add(column);
+                    }
+
+                    if(columnWords.length > 3) {
+                        String[] column = {columnName, columnDataType, columnConstraint, foreignTableName, foreignTableColumn};
+                        columns.add(column);
+                    }
                 }
-
-
             }
         }
+        System.out.println(individualColumnArray.size() == columns.size());
         return individualColumnArray.size() == columns.size();
 
     }
@@ -171,5 +209,51 @@ public class CreateTable {
                 System.out.println("Wrong Syntax");
             }
         }
+    }
+
+    public boolean isForeignKeyValid(String databaseMetaPath, String foreignTableName, String foreignTableColumn, String columnDataType) throws FileNotFoundException {
+        boolean isValid = false;
+        File f = new File(databaseMetaPath);
+        try(BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            String table = "";
+            String tableKey = "";
+            String keyDataType = "";
+
+            READFILE: while ((line = br.readLine()) != null) {
+                int i = 0;
+                String[] s = line.split("\\|");
+                if (s[0].equals("Table")) {
+                    table = s[1];
+                } else {
+                    int length = s.length;
+                    String column = "";
+                    while (i < length) {
+                        if (s[i].equalsIgnoreCase("primary_key")) {
+                            tableKey = s[0];
+                            keyDataType = s[1];
+                            if(Objects.equals(table, foreignTableName) &&
+                                    tableKey.equals(foreignTableColumn) &&
+                                    Objects.equals(keyDataType, columnDataType)) {
+                                isValid = true;
+                                break;
+                            }
+                            continue READFILE;
+                        } else {
+                            column += s[i];
+                        }
+                        if (i != (length - 1)) {
+                            column += " | ";
+                        }
+                        i++;
+                    }
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return isValid;
     }
 }

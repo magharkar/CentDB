@@ -56,4 +56,8 @@ public class Main {
         }
 
     }
+        //CreateTable t = new CreateTable();
+        //String databaseMetaPath = "Databases//test//test-meta.txt";
+        //t.isForeignKeyValid(databaseMetaPath, "t1", "id", "int");
+    //}
 }
