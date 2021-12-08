@@ -137,10 +137,10 @@ public class CreateTable {
 
                 String foreignTableColumn = "";
                 String foreignTableName = "";
-                columnConstraint = columnWords[2];
 
 
                 if(columnWords.length >= 3)  {
+                    columnConstraint = columnWords[2];
                     boolean isConstraintMatched = false;
                     if(columnWords.length == 3) {
                         for (ColumnConstraints columnConstraintEnum : ColumnConstraints.values()) {
@@ -248,9 +248,7 @@ public class CreateTable {
         String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
         //  CreateDatabase db = new CreateDatabase();
         String currentDatabase = UseDatabase.getDatabaseName();
-        if(currentDatabase == null) {
-            System.out.println("Please perform use database query first");
-        } else {
+        if(Objects.nonNull(currentDatabase)) {
             if(createSyntax.equalsIgnoreCase(CREATE_TABLE_COMMAND) &&
                     input.lastIndexOf(')') == input.length() - 1) {
                 CreateTable createTable = new CreateTable();

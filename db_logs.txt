@@ -1,0 +1,24 @@
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+null|Failure|Use|db||0|0|Trying to use a non-existing database|Wed Dec 08 15:59:35 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+null|Success|Use|db||0|0|Database name set|Wed Dec 08 16:02:43 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:13:34 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:24:02 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:25:40 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:30:15 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:34:00 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:38:19 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:48:10 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Create|db|t3|0|0|Create table success|Wed Dec 08 16:49:06 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:53:11 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 16:55:21 AST 2021

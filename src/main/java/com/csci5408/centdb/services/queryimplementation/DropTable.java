@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 
 public class DropTable {
-    public boolean dropTable(String query) throws IOException {
+    public static boolean dropTable(String query) throws IOException {
         QueryDao queryDao = new QueryDao();
         Pattern pattern = Pattern.compile("drop\\ *table\\s.*");
         Matcher matcher = pattern.matcher(query);

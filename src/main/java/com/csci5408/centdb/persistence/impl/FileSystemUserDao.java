@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static com.csci5408.centdb.model.util.Constants.DELIMITER;
+import static com.csci5408.centdb.model.util.Constants.USER_PATH;
 
 public class FileSystemUserDao implements UserDao {
 	private FileWriter fileWriter;
@@ -27,14 +28,13 @@ public class FileSystemUserDao implements UserDao {
 
 	public List<User> getUsers() throws IOException {
 		List<User> userList = new ArrayList<>();
-		BufferedReader bufferedReader = new BufferedReader(new FileReader("resources/User_Profile.txt"));
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(USER_PATH));
 		String line;
 		while ((line = bufferedReader.readLine()) != null) {
 			String[] str = line.split(Pattern.quote(DELIMITER));
-			if (!Objects.isNull(str) && str.length > 0) {
+			if (!Objects.isNull(str) && str.length > 1) {
 				userList.add(new User(str[0], str[1], Arrays.asList(str[2], str[3])));
-			} else
-				throw new NullPointerException();
+			}
 		}
 		return userList;
 	}
