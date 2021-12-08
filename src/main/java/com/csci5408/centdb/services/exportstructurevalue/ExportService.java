@@ -49,9 +49,12 @@ public class ExportService {
         List<String> columnValues = fileReader.getColumnValues(tablePath);
         String insertColumn = columnValues.get(0).replace(DELIMITER,",");
         insertQuery.append(String.format("(%s)\nVALUES ",insertColumn));
-        for (int i=0;i<columnValues.size();i++){
+        for (int i=1;i<columnValues.size();i++){
             insertColumn = columnValues.get(i).replace(DELIMITER,",");
             insertQuery.append(String.format("(%s)",insertColumn));
+            if(i!=columnValues.size()-1){
+                insertQuery.append(String.format(","));
+            }
         }
         insertQuery.append(String.format(";\n"+
                 "UNLOCK TABLES;"));
@@ -74,4 +77,3 @@ public class ExportService {
         System.out.println("Export file generated in location: "+exportPath);
     }
 }
-
