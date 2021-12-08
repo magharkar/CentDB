@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
+import com.csci5408.centdb.logging.GeneralLogs;
 import com.csci5408.centdb.model.User;
 import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
 import com.csci5408.centdb.services.analytics.Analytics;
@@ -20,6 +21,7 @@ import com.csci5408.centdb.services.reverseengineering.ReverseEngineering;
 
 public class UserService {
 	FileSystemUserDao userDao;
+	GeneralLogs generalLogs = new GeneralLogs();
 	public static Scanner sc = new Scanner(System.in);
 	private static String name;
 
@@ -52,6 +54,7 @@ public class UserService {
 					User userDetails = userDao.getUserDetails(userId);
 					if (!Objects.isNull(userDetails)) {
 						System.out.println("User Id already exists. Please enter another User ID or Login.");
+						generalLogs.createGeneralLogs(userId,"Failed","Registration attempted, User Id already exists");
 						continue ACCESS;
 					}
 					user.setUserId(userId);
@@ -73,6 +76,7 @@ public class UserService {
 					user.setSecurityAnswers(securityAnswers);
 					userDao.addUser(user);
 					System.out.println("User registered successfully!");
+					generalLogs.createGeneralLogs(userId,"Success","User registered successfully");
 				} finally {
 				}
 				break;
@@ -96,15 +100,18 @@ public class UserService {
 				String errorMessage = userDao.userValidation(registerUser);
 				if (!errorMessage.equals("")) {
 					System.out.println(errorMessage);
+					generalLogs.createGeneralLogs(UserService.getUserName(),"Failed",errorMessage);
 					continue ACCESS;
 				}
 				setUserName(registerUser.getUserId());
 				System.out.println("Successfully logged in!");
+				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","Successfully logged in!");
 				userOperations();
 				break;
 
 			case 3:
 				System.out.println("Thank you!");
+				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","User logged out!");
 				System.exit(0);
 			}
 		} while (true);
@@ -115,6 +122,7 @@ public class UserService {
 	}
 
 	private static void userOperations() throws Exception {
+		GeneralLogs generalLogs = new GeneralLogs();
 		CheckTypeOfQuery checkTypeOfQuery = new CheckTypeOfQuery();
 		boolean validateQuery = false;
 		do {
@@ -133,11 +141,16 @@ public class UserService {
 				System.out.println("Query Validation " + validateQuery);
 				if (validateQuery) {
 					checkTypeOfQuery.checkTypeOfQuery(query);
+					generalLogs.createGeneralLogs(UserService.getUserName(),"Success","User entered a valid query :"+query);
+				}
+				else{
+					generalLogs.createGeneralLogs(UserService.getUserName(),"Failed","User entered an invalid query :"+query);
 				}
 				break;
 			case 2:
 				ExportService exportService = new ExportService();
 				exportService.createExport();
+				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","Export Service completed successfully!");
 				break;
 			case 3:
 				System.out.println("Here are the databases... ");
@@ -155,13 +168,15 @@ public class UserService {
 				for (Integer i : databaseMap.keySet()) {
 					System.out.println(i + "." + databaseMap.get(i));
 				}
-				System.out.println("Please choose the databse to get the data model(reverse engineer)");
+				System.out.println("Please choose the database to get the data model(reverse engineer)");
 				int choice = sc.nextInt();
+				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","User selected "+choice+" database for Data Model");
 				ReverseEngineering.reverseEngineer(databaseMap.get(choice));
 				break;
 			case 4:
 				Analytics analytics = new Analytics();
 				analytics.countQueries("resources\\Databases");
+				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","Analytics completed successfully!");
 				break;
 			case 5:
 				System.out.println("Logging out. Thank you!");
