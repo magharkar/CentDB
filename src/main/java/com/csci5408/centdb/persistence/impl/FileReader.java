@@ -1,21 +1,17 @@
 package com.csci5408.centdb.persistence.impl;
 
-import static com.csci5408.centdb.model.util.Constants.DELIMITER;
-import static com.csci5408.centdb.model.util.Constants.METADATA_PATH;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import com.csci5408.centdb.model.Column;
 import com.csci5408.centdb.model.Metadata;
 import com.csci5408.centdb.persistence.IFileReader;
 import com.csci5408.centdb.services.queryimplementation.UseDatabase;
+
+import static com.csci5408.centdb.model.util.Constants.*;
 
 public class FileReader implements IFileReader {
 	@Override
@@ -48,6 +44,18 @@ public class FileReader implements IFileReader {
 		}
 		add(metadataList, tableName, columns);
 		return metadataList;
+	}
+
+	@Override
+	public Set<Map.Entry<String, String>> getDatabaseNames() throws IOException {
+		BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(String.format(DB_METADATA_PATH)));
+		Map<String,String> databaseNames = new HashMap<>();
+		int ctr = 1;
+		for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+			databaseNames.put(Integer.toString(ctr),line.trim());
+			ctr++;
+		}
+		return databaseNames.entrySet();
 	}
 
 	@Override

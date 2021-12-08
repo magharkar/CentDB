@@ -14,4 +14,5 @@ public final class Constants {
     public static final String METADATA_PATH = "resources/Databases/%s/%s-meta.txt";
     public static final String EXPORT_PATH = "resources/Databases/dump-%s.sql";
     public static final String USER_PATH = "resources/User_Profile.txt";
+    public static final String DB_METADATA_PATH = "resources/databases.txt";
 }

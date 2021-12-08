@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface IQueryDao {
     boolean dropTable(Query query);
-    List<Metadata> getMetadata() throws IOException;
 }

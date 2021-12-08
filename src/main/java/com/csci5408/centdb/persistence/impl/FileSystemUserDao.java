@@ -76,6 +76,9 @@ public class FileSystemUserDao implements UserDao {
 				System.out.println(user.getSecurityAnswers().get(1) + " second answer");
 			}
 		}
+		else{
+			Message = "User Id not found! Please try again.";
+		}
 		return Message;
 	}
 

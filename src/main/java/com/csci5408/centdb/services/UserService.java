@@ -20,7 +20,7 @@ import com.csci5408.centdb.services.reverseengineering.ReverseEngineering;
 
 public class UserService {
 	FileSystemUserDao userDao;
-	static Scanner sc = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
 	private static String name;
 
 	public static String getUserName() {
