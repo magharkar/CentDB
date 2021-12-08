@@ -1,2 +1,0 @@
-name|country|Phone|email
-tanvi|india|123|test@gmail.com

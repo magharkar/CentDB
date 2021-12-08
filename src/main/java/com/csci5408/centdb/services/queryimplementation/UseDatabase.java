@@ -1,7 +1,5 @@
 package com.csci5408.centdb.services.queryimplementation;
 
-import com.csci5408.centdb.services.queryimplementation.CreateDatabase;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,8 +7,14 @@ import java.nio.file.Paths;
 public class UseDatabase {
     static final String USE_DATABASE_COMMAND = "use";
 
-    public String use(String input) {
-        CreateDatabase db = new CreateDatabase();
+    private static String name;
+    public static String getDatabaseName() {
+        return name;
+    }
+    public void setDatabaseName(String newName) {
+        name = newName;
+    }
+    public void use(String input) {
         String[] inputWords = input.split(" ");
         // use database syntax will have length 2
         String initializerString = inputWords[0];
@@ -23,11 +27,11 @@ public class UseDatabase {
             }
             else {
                 System.out.println("Setting database name");
-                db.setDatabaseName(inputWords[1]);
+                System.out.println(inputWords[1]);
+                setDatabaseName(inputWords[1]);
             }
         }  else  {
             System.out.println("Wrong Syntax");
         }
-        return db.getDatabaseName();
     }
 }

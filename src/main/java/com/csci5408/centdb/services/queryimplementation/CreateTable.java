@@ -20,8 +20,8 @@ public class CreateTable {
     public void create(String currentDatabase, String tableName, String[] allInputWords,
                        String inputString) throws IOException {
         // 1. Create table file with name array[2]. throw error if it exists
-        String databaseMetaPath = "Databases" + "//" + currentDatabase + "//" + currentDatabase + "-meta.txt";
-        String tableFilePath = "Databases" + "//" + currentDatabase + "//" + tableName + ".txt";
+        String databaseMetaPath = "resources//Databases" + "//" + currentDatabase + "//" + currentDatabase + "-meta.txt";
+        String tableFilePath = "resources//Databases" + "//" + currentDatabase + "//" + tableName + ".txt";
         File tableFile = new File(tableFilePath);
         //boolean isFileCreated = tableFile.createNewFile();
         if(tableFile.exists()) {
@@ -149,11 +149,11 @@ public class CreateTable {
 
     }
 
-    public void createTable(String input, String currentDatabase) throws IOException {
+    public void createTable(String input) throws IOException {
         String[] inputWords = input.split(" ");
         String createSyntax = inputWords[0] + SPACE + inputWords[1] + SPACE;
         //  CreateDatabase db = new CreateDatabase();
-
+        String currentDatabase = UseDatabase.getDatabaseName();
         if(currentDatabase == null) {
             System.out.println("Please perform use database query first");
         } else {

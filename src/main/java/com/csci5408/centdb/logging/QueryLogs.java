@@ -20,7 +20,7 @@ public class QueryLogs {
         }
         query_log = query_log+query_type+"|"+status+"|"+database_name+"|"+table_name+"|"+column_affected+"|"
                 +row_affected+"|"+constraint+"|"+(new Date());
-        FileWriter writer = new FileWriter(database_name+"\\"+database_name+"_logs.txt",true);
+        FileWriter writer = new FileWriter(database_name+"_logs.txt",true);
         writer.write(query_log+"\n");
         writer.close();
     }

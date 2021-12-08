@@ -1,0 +1,3 @@
+Table|t1
+num|int|primary_key
+name|text|

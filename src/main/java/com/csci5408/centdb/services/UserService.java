@@ -100,7 +100,7 @@ public class UserService {
 		return false;
 	}
 	private static void userOperations() throws IOException {
-
+		CheckTypeOfQuery checkTypeOfQuery = new CheckTypeOfQuery();
 		boolean validateQuery = false;
 		do {
 			System.out.println(
@@ -108,11 +108,15 @@ public class UserService {
 			int ch = sc.nextInt();
 			switch (ch) {
 			case 1:
-				String query = "use test";//sc.next();
+				Scanner scanner = new Scanner(System.in);
+				System.out.println("inside case1");
+				String query;
+				System.out.println("Enter valid query");
+				query = scanner.nextLine();
 				QueryValidator queryValidator = new QueryValidator();
 				validateQuery = queryValidator.validateQuery(query);
+				System.out.println("Query Validation"+validateQuery);
 				if(validateQuery) {
-					CheckTypeOfQuery checkTypeOfQuery = new CheckTypeOfQuery();
 					checkTypeOfQuery.checkTypeOfQuery(query);
 				}
 				break;

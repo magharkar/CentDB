@@ -49,7 +49,7 @@ public class Transactions {
 			if (statement.trim().startsWith("insert")) {
 
 				// if (queryValidator.validateQuery(statement)) {
-				Object updatedResult = InsertQuery.insert(statement, "test");
+				Object updatedResult= InsertQuery.insert(statement, "test");
 				addToBuffer(updatedResult, "insert");
 				// } else {
 				// throw new Exception("There's an error in the syntax..please check it");

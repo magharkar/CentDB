@@ -154,5 +154,4 @@ public class UpdateQuery {
 		System.out.println("Update Query Completed!");
 		return "Update Query Completed!";
 	}
-
 }

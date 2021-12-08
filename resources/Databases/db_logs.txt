@@ -1,0 +1,4 @@
+Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+Success|Update|resources\Databases\db|t1|num|num=3|where name=aabhaas|Wed Dec 08 07:44:21 IST 2021
+Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+Success|Delete Row|resources\Databases\db|t1|NA|NA|where num=2|Wed Dec 08 07:46:21 IST 2021

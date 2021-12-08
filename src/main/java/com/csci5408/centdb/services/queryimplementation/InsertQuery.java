@@ -32,7 +32,7 @@ public class InsertQuery {
                 System.out.println("111" + " " + table);
             }
 
-            regex = "values\\((.*?)\\);";
+            regex = "values \\((.*?)\\)";
             pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
             matcher = pattern.matcher(query);
             while (matcher.find()) {
@@ -40,9 +40,9 @@ public class InsertQuery {
             }
             System.out.println("222" + " " + values);
 
-            File f = new File(table + ".txt");
+            File f = new File(database+"\\"+table + ".txt");
             if (f.exists()) {
-                BufferedReader br = new BufferedReader(new FileReader(table + ".txt"));
+                BufferedReader br = new BufferedReader(new FileReader(database+"\\"+table + ".txt"));
                 String columnName = br.readLine();
                 if (columnName != null) {
                     System.out.println("333" + " " + columnName);
@@ -59,7 +59,7 @@ public class InsertQuery {
                     System.out.println(rowData);
 
                 }
-                BufferedWriter bw = new BufferedWriter(new FileWriter(table + ".txt", true));
+                BufferedWriter bw = new BufferedWriter(new FileWriter(database+"\\"+table + ".txt", true));
                 bw.append(System.lineSeparator());
                 String newRow = "";
                 for (String col : columnNames) {
@@ -77,7 +77,6 @@ public class InsertQuery {
         } catch (Exception e) {
             System.out.println(e);
         }
-
         return null;
     }
 }
