@@ -17,7 +17,6 @@ import com.csci5408.centdb.services.QueryValidator;
 import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
 import com.csci5408.centdb.services.queryimplementation.InsertQuery;
 import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
-import com.csci5408.centdb.services.transactions.CommitToPersistence;
 
 public class Transactions {
 
@@ -29,13 +28,12 @@ public class Transactions {
 	static Integer transactionNumber = 101;
 	static List<Map<String, String>> bufferPersistence = new ArrayList<>();
 
-	public void processTransaction(String query) throws Exception {
+	public void processTransaction(String query, String database) throws Exception {
 		Map<String, Map<String, String>> tableData = new HashMap<>();
 		QueryValidator queryValidator = new QueryValidator();
 
 		String[] commands = query.split(";");
 		List<String> commandsList = Arrays.asList(commands);
-		System.out.println(commandsList);
 		for (int i = 0; i < commandsList.size(); i++) {
 			if (i == 0) {
 				currentPointer = null;
@@ -47,28 +45,25 @@ public class Transactions {
 			}
 			String statement = commandsList.get(i);
 			if (statement.trim().startsWith("insert")) {
-
-				// if (queryValidator.validateQuery(statement)) {
-				Object updatedResult= InsertQuery.insert(statement, "test");
-				addToBuffer(updatedResult, "insert");
-				// } else {
-				// throw new Exception("There's an error in the syntax..please check it");
-//		}
+				if (queryValidator.validateQuery(statement)) {
+					Object updatedResult = InsertQuery.insert(statement, database);
+					addToBuffer(updatedResult, "insert");
+				} else {
+					throw new Exception("There's an error in the syntax..please check it");
+				}
 			} else if (statement.trim().startsWith("update"))
 
 			{
-
 				if (queryValidator.validateQuery(statement)) {
-					Object updatedResult = UpdateQuery.updateQuery(statement, "databases", false);
+					Object updatedResult = UpdateQuery.updateQuery(statement, database, false);
 					addToBuffer(updatedResult, "update");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
 
 				}
 			} else if (statement.trim().startsWith("delete")) {
-
 				if (queryValidator.validateQuery(statement)) {
-					Object rowToBeDeleted = DeleteQuery.deleteQuery(statement, "databases", false);
+					Object rowToBeDeleted = DeleteQuery.deleteQuery(statement, database, false);
 					addToBuffer(rowToBeDeleted, "delete");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
@@ -99,7 +94,6 @@ public class Transactions {
 
 	private static void addTransactionLogs() throws IOException {
 		for (Transaction t : transactionsList) {
-			System.out.println(t.toString());
 			EventLogs.createTransactionLog(t, "test");
 		}
 	}

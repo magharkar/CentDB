@@ -1,5 +1,8 @@
 package com.csci5408.centdb.services.queryimplementation;
 
+import com.csci5408.centdb.logging.QueryLogs;
+import com.csci5408.centdb.services.UserService;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,6 +48,9 @@ public class CreateDatabase {
             boolean folderCreated = databaseDirectory.mkdir();
             if(!folderCreated) {
                 System.out.println("This database already exists");
+                QueryLogs queryLogs = new QueryLogs();
+                queryLogs.createQueryLog(UserService.getUserName(), "Create", "Failure", inputWords[2], "", "0",
+                        "0", "Trying to create an existing database");
             } else {
                 metaFileWriter.write("Database|" + inputWords[2] + "\n");
                 metaFileWriter.close();
@@ -55,9 +61,15 @@ public class CreateDatabase {
                 File databaseMetaFile = new File(databasePathDir + "//" + inputWords[2] + "-meta.txt");
                 databaseMetaFile.createNewFile();
                 name = inputWords[2];
+                QueryLogs queryLogs = new QueryLogs();
+                queryLogs.createQueryLog(UserService.getUserName(), "Create", "success", inputWords[2], "", "0",
+                        "0", "Create new database");
             }
         } else  {
             System.out.println("Wrong Syntax");
+            QueryLogs queryLogs = new QueryLogs();
+            queryLogs.createQueryLog(UserService.getUserName(), "Create", "Failure", inputWords[2], "", "0",
+                    "0", "create database syntax error");
         }
     }
 }
