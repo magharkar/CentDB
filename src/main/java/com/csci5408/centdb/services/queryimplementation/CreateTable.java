@@ -137,10 +137,10 @@ public class CreateTable {
 
                 String foreignTableColumn = "";
                 String foreignTableName = "";
-                columnConstraint = columnWords[2];
 
 
                 if(columnWords.length >= 3)  {
+                    columnConstraint = columnWords[2];
                     boolean isConstraintMatched = false;
                     if(columnWords.length == 3) {
                         for (ColumnConstraints columnConstraintEnum : ColumnConstraints.values()) {
