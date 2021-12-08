@@ -17,6 +17,7 @@ import com.csci5408.centdb.services.QueryValidator;
 import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
 import com.csci5408.centdb.services.queryimplementation.InsertQuery;
 import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
+import com.csci5408.centdb.services.queryimplementation.UseDatabase;
 
 public class Transactions {
 
@@ -46,7 +47,7 @@ public class Transactions {
 			String statement = commandsList.get(i);
 			if (statement.trim().startsWith("insert")) {
 				if (queryValidator.validateQuery(statement)) {
-					Object updatedResult = InsertQuery.insert(statement, database);
+					Object updatedResult = InsertQuery.insert(statement, database, UseDatabase.getDatabaseName());
 					addToBuffer(updatedResult, "insert");
 				} else {
 					throw new Exception("There's an error in the syntax..please check it");
