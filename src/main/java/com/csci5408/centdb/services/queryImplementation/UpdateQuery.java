@@ -1,12 +1,20 @@
-package com.csci5408.centdb.services.queryimplementation;
+package com.csci5408.centdb.services.queryImplementation;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.csci5408.centdb.logging.QueryLogs;
-import com.csci5408.centdb.model.User;
 import com.csci5408.centdb.services.UserService;
-
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
 
 public class UpdateQuery {
 	public static Object updateQuery(String query, String databaseName, boolean persistentFileUpdate)
@@ -141,13 +149,13 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog, constraint.split("=")[0],
-						constraint, "where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog,
+						constraint.split("=")[0], constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog, constraint.split("=")[0],
-						constraint, "where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog,
+						constraint.split("=")[0], constraint, "where " + whereCondition);
 				System.out.println(e);
 			}
 		} else {

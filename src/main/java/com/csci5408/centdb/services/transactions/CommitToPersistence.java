@@ -15,8 +15,6 @@ import com.csci5408.centdb.logging.EventLogs;
 import com.csci5408.centdb.logging.QueryLogs;
 import com.csci5408.centdb.model.LogDetails;
 import com.csci5408.centdb.model.LogDetails.LogBuilder;
-import com.csci5408.centdb.model.User;
-import com.csci5408.centdb.persistence.UserDao;
 import com.csci5408.centdb.services.UserService;
 
 public class CommitToPersistence {

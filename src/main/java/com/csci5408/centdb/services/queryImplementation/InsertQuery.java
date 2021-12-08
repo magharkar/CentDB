@@ -1,4 +1,4 @@
-package com.csci5408.centdb.services.queryimplementation;
+package com.csci5408.centdb.services.queryImplementation;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

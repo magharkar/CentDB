@@ -1,4 +1,4 @@
-package com.csci5408.centdb.services.reverseengineering;
+package com.csci5408.centdb.services.reverseEngineering;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

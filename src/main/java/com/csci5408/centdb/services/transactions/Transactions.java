@@ -14,10 +14,9 @@ import java.util.Scanner;
 import com.csci5408.centdb.logging.EventLogs;
 import com.csci5408.centdb.model.Transaction;
 import com.csci5408.centdb.services.QueryValidator;
-import com.csci5408.centdb.services.queryimplementation.DeleteQuery;
-import com.csci5408.centdb.services.queryimplementation.InsertQuery;
-import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
-import com.csci5408.centdb.services.transactions.CommitToPersistence;
+import com.csci5408.centdb.services.queryImplementation.DeleteQuery;
+import com.csci5408.centdb.services.queryImplementation.InsertQuery;
+import com.csci5408.centdb.services.queryImplementation.UpdateQuery;
 
 public class Transactions {
 
@@ -49,7 +48,7 @@ public class Transactions {
 			if (statement.trim().startsWith("insert")) {
 
 				// if (queryValidator.validateQuery(statement)) {
-				Object updatedResult= InsertQuery.insert(statement, "test");
+				Object updatedResult = InsertQuery.insert(statement, "test");
 				addToBuffer(updatedResult, "insert");
 				// } else {
 				// throw new Exception("There's an error in the syntax..please check it");

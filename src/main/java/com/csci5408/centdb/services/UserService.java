@@ -1,16 +1,16 @@
 package com.csci5408.centdb.services;
 
 
-import com.csci5408.centdb.model.User;
-import com.csci5408.centdb.persistence.impl.FileSystemUserDao;
+import static com.csci5408.centdb.model.util.Constants.SECURITY_QUESTIONS;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static com.csci5408.centdb.model.util.Constants.*;
+import com.csci5408.centdb.persistence.implementation.FileSystemUserDao;
+import com.csci5408.centdb.model.User;
 
 public class UserService {
 	FileSystemUserDao userDao;

@@ -1,4 +1,4 @@
-package com.csci5408.enums;
+package com.csci5408.centdb.enums;
 
 public enum ColumnDataTypes {
     TEXT,

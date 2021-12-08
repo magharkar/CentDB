@@ -1,6 +1,4 @@
-package com.csci5408.centdb.services.queryimplementation;
-
-import com.csci5408.centdb.services.UserService;
+package com.csci5408.centdb.services.queryImplementation;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

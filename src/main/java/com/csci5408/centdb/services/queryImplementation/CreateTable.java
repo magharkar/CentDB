@@ -1,12 +1,12 @@
-package com.csci5408.centdb.services.queryimplementation;
-import com.csci5408.enums.ColumnConstraints;
-import com.csci5408.enums.ColumnDataTypes;
-
+package com.csci5408.centdb.services.queryImplementation;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import com.csci5408.centdb.enums.ColumnConstraints;
+import com.csci5408.centdb.enums.ColumnDataTypes;
 
 public class CreateTable {
     static  String CREATE_TABLE_COMMAND = "Create table ";

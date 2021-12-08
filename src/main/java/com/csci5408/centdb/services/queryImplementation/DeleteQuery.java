@@ -1,12 +1,21 @@
-package com.csci5408.centdb.services.queryimplementation;
+package com.csci5408.centdb.services.queryImplementation;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.csci5408.centdb.logging.QueryLogs;
-import com.csci5408.centdb.model.User;
 import com.csci5408.centdb.services.UserService;
-
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
 
 public class DeleteQuery {
 	public static Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
