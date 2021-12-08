@@ -54,9 +54,6 @@ public class CreateDatabase {
             } else {
                 metaFileWriter.write("Database|" + inputWords[2] + "\n");
                 metaFileWriter.close();
-                // create db log file
-                File databaseLogFile = new File(databasePathDir + "//" + inputWords[2] + "-log.txt");
-                databaseLogFile.createNewFile();
                 // create db metadata file
                 File databaseMetaFile = new File(databasePathDir + "//" + inputWords[2] + "-meta.txt");
                 databaseMetaFile.createNewFile();
