@@ -9,7 +9,8 @@ import java.util.*;
 import java.util.regex.*;
 
 public class DeleteQuery {
-	public static Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate) throws IOException {
+	public static Object deleteQuery(String query, String databaseName, boolean persistentFileUpdate)
+			throws IOException {
 		ArrayList<String> columns = new ArrayList<>();
 		ArrayList<String> data = new ArrayList<>();
 		String tableName = "";
@@ -105,13 +106,13 @@ public class DeleteQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Success", databaseName, tableNameLog, "NA", "NA",
-						"where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Delete Row", "Success",
+						UseDatabase.getDatabaseName(), tableNameLog, "NA", "NA", "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(),"Delete Table Row", "Failure", databaseName, tableNameLog, "NA", "NA",
-						"where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Delete Table Row", "Failure",
+						UseDatabase.getDatabaseName(), tableNameLog, "NA", "NA", "where " + whereCondition);
 				System.out.println(e);
 			}
 		} else {

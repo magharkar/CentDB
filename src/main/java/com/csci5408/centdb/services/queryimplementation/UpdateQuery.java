@@ -153,12 +153,12 @@ public class UpdateQuery {
 				}
 
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", databaseName, tableNameLog,
-						constraint.split("=")[0], constraint, "where " + whereCondition);
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Success", UseDatabase.getDatabaseName(),
+						tableNameLog, constraint.split("=")[0], constraint, "where " + whereCondition);
 
 			} catch (Exception e) {
 				QueryLogs queryLogs = new QueryLogs();
-				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", databaseName, tableNameLog,
+				queryLogs.createQueryLog(UserService.getUserName(), "Update", "Failure", UseDatabase.getDatabaseName(), tableNameLog,
 						constraint.split("=")[0], constraint, "where " + whereCondition);
 				System.out.println(e);
 			}

@@ -52,7 +52,7 @@ public class CreateDatabase {
                 queryLogs.createQueryLog(UserService.getUserName(), "Create", "Failure", inputWords[2], "", "0",
                         "0", "Trying to create an existing database");
             } else {
-                metaFileWriter.write("Database|" + inputWords[2] + "\n");
+                metaFileWriter.write(inputWords[2] + "\n");
                 metaFileWriter.close();
                 // create db metadata file
                 File databaseMetaFile = new File(databasePathDir + "//" + inputWords[2] + "-meta.txt");

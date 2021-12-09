@@ -154,16 +154,13 @@ public class UserService {
 				break;
 			case 3:
 				System.out.println("Here are the databases... ");
-				BufferedReader br = new BufferedReader(new FileReader("databases.txt"));
+				BufferedReader br = new BufferedReader(new FileReader("resources\\databases.txt"));
 				String line = null;
 				int count = 0;
 				Map<Integer, String> databaseMap = new HashMap<>();
 				while ((line = br.readLine()) != null) {
-					String st[] = line.split("\\|");
-					if (st.length > 1) {
 						count += 1;
-						databaseMap.put(count, st[1]);
-					}
+						databaseMap.put(count, line);
 				}
 				for (Integer i : databaseMap.keySet()) {
 					System.out.println(i + "." + databaseMap.get(i));

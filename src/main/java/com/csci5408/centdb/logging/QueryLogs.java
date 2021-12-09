@@ -7,7 +7,7 @@ public class QueryLogs {
                                String table_name, String column_affected, String row_affected,
                                String constraint) throws IOException {
         String query_log="";
-        File f = new File("resources+\\Databases\\"+database_name+"\\"+database_name+"_QueryLogs.txt");
+        File f = new File("resources\\Databases\\"+database_name+"\\"+database_name+"_QueryLogs.txt");
         if(f.exists()) {
             BufferedReader br = new BufferedReader(new FileReader(f));
             if (br.readLine() == null) {
