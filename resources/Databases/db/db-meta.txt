@@ -1,0 +1,8 @@
+Table|t1
+num|int|primary_key
+name|text|
+Table|t2
+numfk|int|foreign_key|t1|num
+name|text|
+Table|t3
+num|int|
