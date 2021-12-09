@@ -17,6 +17,7 @@ public class EventLogsTest {
     public void transcationLogTest() throws IOException {
         Transaction transaction = new Transaction("341","101","Null","352","START","**Start transaction**","","","","");
         Transaction transaction2 = new Transaction("352","101","341","363","UPDATE","PRODUCT","1551-QC","prodcuctName","tampons","pads");
+        EventLogs.createTransactionLog(transaction,"db");
         EventLogs.createTransactionLog(transaction2,"db");
         File file = new File("resources/Databases/db/TransactionLogs.txt");
         BufferedReader bufferedReader = new BufferedReader(new FileReader("resources/Databases/db/TransactionLogs.txt"));
@@ -25,8 +26,8 @@ public class EventLogsTest {
     @Test
     public void crashReportTest() throws IOException {
         LogDetails logDetails = new LogDetails.LogBuilder()
-                .databaseName("CentDb")
-                .tableName("Orders")
+                .databaseName("db")
+                .tableName("orders")
                 .errorMessage("Error while doing an update")
                 .operationName("Update")
                 .build();

@@ -21,7 +21,7 @@ public class CheckTypeOfQuery {
 	public void checkTypeOfQuery(String query) throws Exception {
 		GeneralLogs generalLogs = new GeneralLogs();
 		String querySplitArray[] = query.split(" ");
-		if(UseDatabase.isDatabaseSet() || querySplitArray[0].equalsIgnoreCase("use")){
+		if(UseDatabase.isDatabaseSet() || querySplitArray[0].equalsIgnoreCase("use") || querySplitArray[0].equalsIgnoreCase("create") && querySplitArray[1].equalsIgnoreCase("database")){
 			if (querySplitArray[0].equalsIgnoreCase("update")) {
 				generalLogs.createGeneralLogs(UserService.getUserName(),"Success","User entered an update query :"+query);
 				UpdateQuery updateQuery = new UpdateQuery();

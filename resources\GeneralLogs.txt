@@ -1,9 +1,0 @@
-User|Status|Log Message|TimeStamp
-05|Success|Successfully logged in!|Wed Dec 08 20:20:23 AST 2021
-05|Success|User entered use database query :use db|Wed Dec 08 20:20:29 AST 2021
-05|Success|User entered a valid query :use db|Wed Dec 08 20:20:29 AST 2021
-05|Success|Successfully logged in!|Wed Dec 08 20:22:15 AST 2021
-05|Success|Successfully logged in!|Wed Dec 08 20:23:44 AST 2021
-05|Success|Successfully logged in!|Wed Dec 08 20:27:28 AST 2021
-05|Success|Successfully logged in!|Wed Dec 08 20:28:25 AST 2021
-05|Success|Successfully logged in!|Wed Dec 08 20:30:37 AST 2021

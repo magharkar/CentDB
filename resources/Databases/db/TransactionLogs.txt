@@ -3,3 +3,5 @@ Transaction Id| Transaction Number|Previous Pointer| Next Pointer| Operation| Ta
 352|101|341|363|PRODUCT|1551-QC|tampons|pads
 352|101|341|363|PRODUCT|1551-QC|tampons|pads
 352|101|341|363|PRODUCT|1551-QC|tampons|pads
+341|101|Null|352|**Start transaction**|||
+352|101|341|363|PRODUCT|1551-QC|tampons|pads
