@@ -1,0 +1,4 @@
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+null|Success|Use|db||0|0|Database name set|Wed Dec 08 20:03:07 AST 2021
+User|Query type|Status|Database Name|Table Name|Column Affected|Row Affected|Condition|TimeStamp
+05|Success|Use|db||0|0|Database name set|Wed Dec 08 20:20:29 AST 2021

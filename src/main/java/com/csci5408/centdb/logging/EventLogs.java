@@ -17,11 +17,14 @@ public class EventLogs {
             FileWriter fileWriter;
             File file = new File(String.format(TRANSACTION_LOG_PATH,databaseName));
             System.out.println(file);
+            fileWriter = new FileWriter(String.format(TRANSACTION_LOG_PATH,databaseName),true);
+
             if(!file.exists()){
                 file.createNewFile();
             }
-            fileWriter = new FileWriter(String.format(TRANSACTION_LOG_PATH,databaseName),true);
-            fileWriter.write(String.format(TRANSACTION_LOG_HEADER));
+            if(file.length()==0){
+                fileWriter.write(String.format(TRANSACTION_LOG_HEADER));
+            }
             fileWriter.write(generateTransactionLogRow(transaction));
             fileWriter.close();
         }

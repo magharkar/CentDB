@@ -8,25 +8,23 @@ import com.csci5408.centdb.persistence.impl.FileReader;
 import com.csci5408.centdb.persistence.impl.QueryDao;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class DropTable {
-    static IFileReader fileReader;
-    static IQueryDao queryDao;
 
-    public DropTable() {
-        this.fileReader = new FileReader();
-        this.queryDao = new QueryDao();
-    }
+
+
+
 
     public static boolean dropTable(String query) throws IOException {
+        IFileReader fileReader = new FileReader();
+        IQueryDao queryDao = new QueryDao();
         Pattern pattern = Pattern.compile("drop\\ *table\\s.*");
         Matcher matcher = pattern.matcher(query);
         if(matcher.matches()){
-
             String[] querySplit = query.split("table");
             if(querySplit.length >1){
                 Query dropQuery = new Query.QueryBuilder()

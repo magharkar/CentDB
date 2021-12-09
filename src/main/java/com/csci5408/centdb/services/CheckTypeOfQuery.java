@@ -11,6 +11,11 @@ import com.csci5408.centdb.services.queryimplementation.UpdateQuery;
 import com.csci5408.centdb.services.queryimplementation.UseDatabase;
 import com.csci5408.centdb.services.transactions.Transactions;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
 public class CheckTypeOfQuery {
 	String databaseName;
 	public void checkTypeOfQuery(String query) throws Exception {
