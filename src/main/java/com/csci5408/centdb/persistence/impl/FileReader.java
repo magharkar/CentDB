@@ -25,7 +25,6 @@ public class FileReader implements IFileReader {
 
 		for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
 			List<String> strings = Arrays.asList(line.split(Pattern.quote(DELIMITER)));
-			System.out.println(strings);
 			if (strings.get(0).equalsIgnoreCase("table")) {
 				if (Objects.nonNull(tableName) && columns.size() > 0) {
 					add(metadataList, tableName, columns);

@@ -12,5 +12,6 @@ public interface IFileReader {
     Set<Map.Entry<String,String>> getDatabaseNames() throws IOException;
     List<String> getColumnValues(String tablePath) throws IOException;
     boolean createFile(String path) throws IOException;
+    boolean checkFileExists(String path);
 
 }
